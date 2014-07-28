@@ -1,0 +1,22 @@
+# Ignore all files.
+
+*.*
+
+# Add back MATLAB files.
+
+!*.m
+!*.mat
+
+# Add back documentation files.
+
+!*.md
+!*.txt
+
+# Add back other files.
+
+!.gitignore
+!*.xml
+
+# Ignore template directory.
+
+Templates
