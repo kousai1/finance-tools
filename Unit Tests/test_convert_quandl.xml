@@ -1,0 +1,588 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<datasets>
+  <total-count type="integer">1661</total-count>
+  <current-page type="integer">1</current-page>
+  <per-page type="integer">20</per-page>
+  <docs type="array">
+    <doc>
+      <id type="integer">6384492</id>
+      <source-code>NYX</source-code>
+      <source-name>NYSE Euronext</source-name>
+      <code>TNLA_IBMA</code>
+      <name>IBM (IBMA)</name>
+      <urlize-name>IBM-IBMA</urlize-name>
+      <description>Currency=USD; Market=Traded not listed Amsterdam; ISIN=US4592001014; NYSE Euronext is a leading global operator of financial markets and provider of innovative trading technologies, NYSE Euronext (NYX) is the holding company and the first cross-border exchange group created by the combination of NYSE Group, Inc. and Euronext N.V., on April 4, 2007. The Company's exchanges located in Europe and the United States trade equities, futures, options, fixed-income, and exchange-traded products. With approximately 8,000 listed issues (excluding European Structured Products) from more than 55 countries, NYSE Euronext's equities markets - the New York Stock Exchange, NYSE Euronext, NYSE MKT, NYSE Alternext and NYSE Arca - represent one-third of the world's equities trading and the most liquidity of any global exchange group.</description>
+      <updated-at>2014-05-22T09:32:25Z</updated-at>
+      <frequency>monthly</frequency>
+      <from-date>1999-01-04</from-date>
+      <to-date>2014-01-22</to-date>
+      <column-names type="array">
+        <column-name>Date</column-name>
+        <column-name>Open</column-name>
+        <column-name>High</column-name>
+        <column-name>Low</column-name>
+        <column-name>Close</column-name>
+        <column-name>Number of Shares</column-name>
+        <column-name>Number of Trades</column-name>
+        <column-name>Turnover</column-name>
+      </column-names>
+      <private type="boolean">false</private>
+      <type nil="true"/>
+      <display-url>http://www.nyx.com</display-url>
+      <premium type="boolean">false</premium>
+    </doc>
+    <doc>
+      <id type="integer">9392787</id>
+      <source-code>GOOG</source-code>
+      <source-name>Google Finance</source-name>
+      <code>AMS_IBMA</code>
+      <name>IBM (IBMA)</name>
+      <urlize-name>IBM-IBMA</urlize-name>
+      <description>No Description Available</description>
+      <updated-at>2014-04-22T19:04:28Z</updated-at>
+      <frequency>daily</frequency>
+      <from-date>2013-01-17</from-date>
+      <to-date>2014-01-22</to-date>
+      <column-names type="array">
+        <column-name>Date</column-name>
+        <column-name>Open</column-name>
+        <column-name>High</column-name>
+        <column-name>Low</column-name>
+        <column-name>Close</column-name>
+        <column-name>Volume</column-name>
+      </column-names>
+      <private type="boolean">false</private>
+      <type nil="true"/>
+      <display-url>https://www.google.com/finance/historical?q=AMS%3AIBMA&amp;ei=VHF6UoCyGYW4rQGEHw&amp;start=GOINDEX&amp;num=30</display-url>
+      <premium type="boolean">false</premium>
+    </doc>
+    <doc>
+      <id type="integer">9819986</id>
+      <source-code>EURONEXT</source-code>
+      <source-name>Euronext Stock Exchange</source-name>
+      <code>IBMA</code>
+      <name>Ibm (IBMA)</name>
+      <urlize-name>Ibm-IBMA</urlize-name>
+      <description>Stock Prices for Ibm from the Euronext Stock Exchange. Currency: USD. Market: Traded not listed Amsterdam</description>
+      <updated-at>2014-07-16T16:59:13Z</updated-at>
+      <frequency>daily</frequency>
+      <from-date>2014-01-22</from-date>
+      <to-date>2014-01-22</to-date>
+      <column-names type="array">
+        <column-name>Date</column-name>
+        <column-name>Open</column-name>
+        <column-name>High</column-name>
+        <column-name>Low</column-name>
+        <column-name>Last</column-name>
+        <column-name>Volume</column-name>
+        <column-name>Turnover</column-name>
+      </column-names>
+      <private type="boolean">false</private>
+      <type nil="true"/>
+      <display-url>https://europeanequities.nyx.com/en/popup/data/download?ml=nyx_pd_stocks</display-url>
+      <premium type="boolean">false</premium>
+    </doc>
+    <doc>
+      <id type="integer">2312719</id>
+      <source-code>GOOG</source-code>
+      <source-name>Google Finance</source-name>
+      <code>NYSE_IBM</code>
+      <name>International Business Machines Corp. (IBM)</name>
+      <urlize-name>International-Business-Machines-Corp-IBM</urlize-name>
+      <description>International Business Machines Corporation (IBM) is an information technology (IT) company. IBM operates in five segments: Global Technology Services (GTS), Global Business Services (GBS), Software, Systems and Technology and Global Financing. GTS primarily provides IT infrastructure services and business process services. GBS provides professional services and application management services. Software consists primarily of middleware and operating systems software. Systems and Technology provides clients with business solutions requiring advanced computing power and storage capabilities. In October 2013, International Business Machines Corporation acquired Xtify Inc. In October 2013, the Company announced that it has completed the acquisition of The Now Factory, a privately held provider of analytics software that helps communications service providers (CSPs) deliver better customer experiences and drive new revenue opportunities.</description>
+      <updated-at>2014-07-17T01:01:38Z</updated-at>
+      <frequency>daily</frequency>
+      <from-date>1981-03-11</from-date>
+      <to-date>2014-07-16</to-date>
+      <column-names type="array">
+        <column-name>Date</column-name>
+        <column-name>Open</column-name>
+        <column-name>High</column-name>
+        <column-name>Low</column-name>
+        <column-name>Close</column-name>
+        <column-name>Volume</column-name>
+      </column-names>
+      <private type="boolean">false</private>
+      <type nil="true"/>
+      <display-url>http://www.google.com/finance/historical?q=NYSE%3AIBM&amp;startdate=Jan+1%2C+1990&amp;output=csv</display-url>
+      <premium type="boolean">false</premium>
+    </doc>
+    <doc>
+      <id type="integer">6384507</id>
+      <source-code>NYX</source-code>
+      <source-name>NYSE Euronext</source-name>
+      <code>XBRU_IBMC</code>
+      <name>IBM CERT (IBMC)</name>
+      <urlize-name>IBM-CERT-IBMC</urlize-name>
+      <description>Currency=EUR; Market=NYSE Euronext Brussels; ISIN=BE0004607488; NYSE Euronext is a leading global operator of financial markets and provider of innovative trading technologies, NYSE Euronext (NYX) is the holding company and the first cross-border exchange group created by the combination of NYSE Group, Inc. and Euronext N.V., on April 4, 2007. The Company's exchanges located in Europe and the United States trade equities, futures, options, fixed-income, and exchange-traded products. With approximately 8,000 listed issues (excluding European Structured Products) from more than 55 countries, NYSE Euronext's equities markets - the New York Stock Exchange, NYSE Euronext, NYSE MKT, NYSE Alternext and NYSE Arca - represent one-third of the world's equities trading and the most liquidity of any global exchange group.</description>
+      <updated-at>2014-06-01T08:48:17Z</updated-at>
+      <frequency>daily</frequency>
+      <from-date>1999-01-04</from-date>
+      <to-date>2014-05-13</to-date>
+      <column-names type="array">
+        <column-name>Date</column-name>
+        <column-name>Open</column-name>
+        <column-name>High</column-name>
+        <column-name>Low</column-name>
+        <column-name>Close</column-name>
+        <column-name>Number of Shares</column-name>
+        <column-name>Number of Trades</column-name>
+        <column-name>Turnover</column-name>
+      </column-names>
+      <private type="boolean">false</private>
+      <type nil="true"/>
+      <display-url>http://www.nyx.com</display-url>
+      <premium type="boolean">false</premium>
+    </doc>
+    <doc>
+      <id type="integer">9819990</id>
+      <source-code>EURONEXT</source-code>
+      <source-name>Euronext Stock Exchange</source-name>
+      <code>IBMC</code>
+      <name>Ibm Cert (IBMC)</name>
+      <urlize-name>Ibm-Cert-IBMC</urlize-name>
+      <description>Stock Prices for Ibm Cert from the Euronext Stock Exchange. Currency: EUR. Market: NYSE Euronext Brussels</description>
+      <updated-at>2014-05-31T17:00:05Z</updated-at>
+      <frequency>daily</frequency>
+      <from-date>2014-02-14</from-date>
+      <to-date>2014-05-30</to-date>
+      <column-names type="array">
+        <column-name>Date</column-name>
+        <column-name>Open</column-name>
+        <column-name>High</column-name>
+        <column-name>Low</column-name>
+        <column-name>Last</column-name>
+        <column-name>Volume</column-name>
+        <column-name>Turnover</column-name>
+      </column-names>
+      <private type="boolean">false</private>
+      <type nil="true"/>
+      <display-url>https://europeanequities.nyx.com/en/popup/data/download?ml=nyx_pd_stocks</display-url>
+      <premium type="boolean">false</premium>
+    </doc>
+    <doc>
+      <id type="integer">9445076</id>
+      <source-code>GOOG</source-code>
+      <source-name>Google Finance</source-name>
+      <code>EBR_IBMC</code>
+      <name>IBM CERT (IBMC)</name>
+      <urlize-name>IBM-CERT-IBMC</urlize-name>
+      <description>No Description Available</description>
+      <updated-at>2014-07-17T01:53:33Z</updated-at>
+      <frequency>daily</frequency>
+      <from-date>2012-11-29</from-date>
+      <to-date>2014-05-30</to-date>
+      <column-names type="array">
+        <column-name>Date</column-name>
+        <column-name>Open</column-name>
+        <column-name>High</column-name>
+        <column-name>Low</column-name>
+        <column-name>Close</column-name>
+        <column-name>Volume</column-name>
+      </column-names>
+      <private type="boolean">false</private>
+      <type nil="true"/>
+      <display-url>https://www.google.com/finance/historical?q=EBR%3AIBMC&amp;ei=VHF6UoCyGYW4rQGEHw&amp;start=GOINDEX&amp;num=30</display-url>
+      <premium type="boolean">false</premium>
+    </doc>
+    <doc>
+      <id type="integer">9275988</id>
+      <source-code>GOOG</source-code>
+      <source-name>Google Finance</source-name>
+      <code>BVMF_IBMB34</code>
+      <name>IBM -DRN ED (IBMB34)</name>
+      <urlize-name>IBM-DRN-ED-IBMB34</urlize-name>
+      <description>No Description Available</description>
+      <updated-at>2014-07-16T03:41:38Z</updated-at>
+      <frequency>daily</frequency>
+      <from-date>2011-10-18</from-date>
+      <to-date>2014-07-15</to-date>
+      <column-names type="array">
+        <column-name>Date</column-name>
+        <column-name>Open</column-name>
+        <column-name>High</column-name>
+        <column-name>Low</column-name>
+        <column-name>Close</column-name>
+        <column-name>Volume</column-name>
+      </column-names>
+      <private type="boolean">false</private>
+      <type nil="true"/>
+      <display-url>http://www.google.com/finance/historical?q=BVMF%3AIBMB34&amp;startdate=Jan+1%2C+1990&amp;output=csv</display-url>
+      <premium type="boolean">false</premium>
+    </doc>
+    <doc>
+      <id type="integer">11186295</id>
+      <source-code>SSE</source-code>
+      <source-name>Boerse Stuttgart</source-name>
+      <code>IBM</code>
+      <name>IBM (IBM) - Stuttgart</name>
+      <urlize-name>IBM-IBM-Stuttgart</urlize-name>
+      <description>Stock Prices for IBM from the Boerse Stuttgart. Currency:EUR; Sector:Technology - Computer Hardware</description>
+      <updated-at>2014-07-16T11:12:10Z</updated-at>
+      <frequency>daily</frequency>
+      <from-date>2014-03-21</from-date>
+      <to-date>2014-07-15</to-date>
+      <column-names type="array">
+        <column-name>Date</column-name>
+        <column-name>High</column-name>
+        <column-name>Low</column-name>
+        <column-name>Last</column-name>
+        <column-name>Previous Day Price</column-name>
+      </column-names>
+      <private type="boolean">false</private>
+      <type nil="true"/>
+      <display-url>https://www.boerse-stuttgart.de/en/IBM-Equity-US4592001014</display-url>
+      <premium type="boolean">false</premium>
+    </doc>
+    <doc>
+      <id type="integer">11225106</id>
+      <source-code>FINRA</source-code>
+      <source-name>Financial Industry Regulatory Authority</source-name>
+      <code>FNRA_IBM</code>
+      <name>ADF Short Interest: IBM</name>
+      <urlize-name>ADF-Short-Interest-IBM</urlize-name>
+      <description>This dataset has no description.</description>
+      <updated-at>2014-07-16T23:36:55Z</updated-at>
+      <frequency>daily</frequency>
+      <from-date>2014-02-14</from-date>
+      <to-date>2014-07-16</to-date>
+      <column-names type="array">
+        <column-name>Date</column-name>
+        <column-name>ShortVolume</column-name>
+        <column-name>ShortExemptVolume</column-name>
+        <column-name>TotalVolume</column-name>
+      </column-names>
+      <private type="boolean">false</private>
+      <type nil="true"/>
+      <display-url nil="true"/>
+      <premium type="boolean">false</premium>
+    </doc>
+    <doc>
+      <id type="integer">4647867</id>
+      <source-code>CBOEFE</source-code>
+      <source-name>CBOE Futures Exchange</source-name>
+      <code>INDEX_VXIBM</code>
+      <name>CBOE Equity VIX on IBM</name>
+      <urlize-name>CBOE-Equity-VIX-on-IBM</urlize-name>
+      <description>In a January 5, 2011, Press Release CBOE announced the creation of new indexes that apply the CBOE Volatility Index® (VIX) methodology to options on five highly active individual stocks. The indexes are designed to measure the expected volatility of the respective individual equities.</description>
+      <updated-at>2014-07-17T00:16:07Z</updated-at>
+      <frequency>daily</frequency>
+      <from-date>2010-06-01</from-date>
+      <to-date>2014-07-16</to-date>
+      <column-names type="array">
+        <column-name>Date</column-name>
+        <column-name>Open</column-name>
+        <column-name>High</column-name>
+        <column-name>Low</column-name>
+        <column-name>Close</column-name>
+      </column-names>
+      <private type="boolean">false</private>
+      <type nil="true"/>
+      <display-url>http://www.ofdp.org</display-url>
+      <premium type="boolean">false</premium>
+    </doc>
+    <doc>
+      <id type="integer">11321227</id>
+      <source-code>CBOE</source-code>
+      <source-name>Chicago Board Options Exchange</source-name>
+      <code>VXIBM</code>
+      <name>Equity VIX on IBM</name>
+      <urlize-name>Equity-VIX-on-IBM</urlize-name>
+      <description>In a January 5, 2011, Press Release CBOE announced the creation of new indexes that apply the CBOE Volatility Index® (VIX) methodology to options on five highly active individual stocks. The indexes are designed to measure the expected volatility of the respective individual equities.</description>
+      <updated-at>2014-07-16T17:25:06Z</updated-at>
+      <frequency>daily</frequency>
+      <from-date>2010-06-01</from-date>
+      <to-date>2014-07-15</to-date>
+      <column-names type="array">
+        <column-name>Date</column-name>
+        <column-name>Open</column-name>
+        <column-name>High</column-name>
+        <column-name>Low</column-name>
+        <column-name>Close</column-name>
+      </column-names>
+      <private type="boolean">false</private>
+      <type nil="true"/>
+      <display-url>http://www.cboe.com/publish/ScheduledTask/MktData/datahouse/VXIBMDailyPrices.csv</display-url>
+      <premium type="boolean">false</premium>
+    </doc>
+    <doc>
+      <id type="integer">9775057</id>
+      <source-code>YAHOO</source-code>
+      <source-name>Yahoo Finance</source-name>
+      <code>IBM</code>
+      <name>IBM: International Business Machines -</name>
+      <urlize-name>IBM-International-Business-Machines</urlize-name>
+      <description>Exchange : . Key Statistics</description>
+      <updated-at>2014-07-17T02:07:18Z</updated-at>
+      <frequency>daily</frequency>
+      <from-date>1962-01-02</from-date>
+      <to-date>2014-07-16</to-date>
+      <column-names type="array">
+        <column-name>Date</column-name>
+        <column-name>Open</column-name>
+        <column-name>High</column-name>
+        <column-name>Low</column-name>
+        <column-name>Close</column-name>
+        <column-name>Volume</column-name>
+        <column-name>Adjusted Close</column-name>
+      </column-names>
+      <private type="boolean">false</private>
+      <type nil="true"/>
+      <display-url>http://ichart.finance.yahoo.com/table.csv?s=IBM&amp;d=31&amp;e=12&amp;f=2039&amp;g=d&amp;a=3&amp;b=7&amp;c=1902&amp;ignore=.csv</display-url>
+      <premium type="boolean">false</premium>
+    </doc>
+    <doc>
+      <id type="integer">3732997</id>
+      <source-code>DMDRN</source-code>
+      <source-name>Damodaran Financial Data</source-name>
+      <code>IBM_TRAD_VOL</code>
+      <name>International Business Machines Corp. ( IBM ) - Trading Volume</name>
+      <urlize-name>International-Business-Machines-Corp-IBM-Trading-Volume</urlize-name>
+      <description>Units: shares. Corporate Finance data is collected and calculated by Prof. Aswath
+Damodaran, Professor of Finance at the Stern School of Business, New
+York University.  The raw data is available here:
+http://pages.stern.nyu.edu/~adamodar/New_Home_Page/data.html</description>
+      <updated-at>2014-03-22T07:41:01Z</updated-at>
+      <frequency>annual</frequency>
+      <from-date>2001-12-31</from-date>
+      <to-date>2011-12-31</to-date>
+      <column-names type="array">
+        <column-name>Date</column-name>
+        <column-name>Trading Volume</column-name>
+      </column-names>
+      <private type="boolean">false</private>
+      <type nil="true"/>
+      <display-url>http://pages.stern.nyu.edu/~adamodar/New_Home_Page/data.html</display-url>
+      <premium type="boolean">false</premium>
+    </doc>
+    <doc>
+      <id type="integer">3732906</id>
+      <source-code>DMDRN</source-code>
+      <source-name>Damodaran Financial Data</source-name>
+      <code>IBM_CORREL</code>
+      <name>International Business Machines Corp. ( IBM ) - Correlation with the Market</name>
+      <urlize-name>International-Business-Machines-Corp-IBM-Correlation-with-the-Market</urlize-name>
+      <description>This is the correlation of stock returns with the market index, using the same time period as the beta estimation. Units: none. Corporate Finance data is collected and calculated by Prof. Aswath
+Damodaran, Professor of Finance at the Stern School of Business, New
+York University.  The raw data is available here:
+http://pages.stern.nyu.edu/~adamodar/New_Home_Page/data.html</description>
+      <updated-at>2014-03-22T15:34:15Z</updated-at>
+      <frequency>annual</frequency>
+      <from-date>1999-12-31</from-date>
+      <to-date>2012-12-31</to-date>
+      <column-names type="array">
+        <column-name>Date</column-name>
+        <column-name>Correlation with the Market</column-name>
+      </column-names>
+      <private type="boolean">false</private>
+      <type nil="true"/>
+      <display-url>http://pages.stern.nyu.edu/~adamodar/New_Home_Page/data.html</display-url>
+      <premium type="boolean">false</premium>
+    </doc>
+    <doc>
+      <id type="integer">3732975</id>
+      <source-code>DMDRN</source-code>
+      <source-name>Damodaran Financial Data</source-name>
+      <code>IBM_PAYOUT</code>
+      <name>International Business Machines Corp. ( IBM ) - Payout Ratio</name>
+      <urlize-name>International-Business-Machines-Corp-IBM-Payout-Ratio</urlize-name>
+      <description>Units: . Corporate Finance data is collected and calculated by Prof. Aswath
+Damodaran, Professor of Finance at the Stern School of Business, New
+York University.  The raw data is available here:
+http://pages.stern.nyu.edu/~adamodar/New_Home_Page/data.html</description>
+      <updated-at>2014-03-22T15:15:27Z</updated-at>
+      <frequency>annual</frequency>
+      <from-date>1999-12-31</from-date>
+      <to-date>2012-12-31</to-date>
+      <column-names type="array">
+        <column-name>Date</column-name>
+        <column-name>Payout Ratio</column-name>
+      </column-names>
+      <private type="boolean">false</private>
+      <type nil="true"/>
+      <display-url>http://pages.stern.nyu.edu/~adamodar/New_Home_Page/data.html</display-url>
+      <premium type="boolean">false</premium>
+    </doc>
+    <doc>
+      <id type="integer">3732986</id>
+      <source-code>DMDRN</source-code>
+      <source-name>Damodaran Financial Data</source-name>
+      <code>IBM_REINV_RATE</code>
+      <name>International Business Machines Corp. ( IBM ) - Reinvestment Rate</name>
+      <urlize-name>International-Business-Machines-Corp-IBM-Reinvestment-Rate</urlize-name>
+      <description>Reinvestment Rate = (Net Capital Expenditures + Change in WC) / EBIT(1-t). Units: %. Corporate Finance data is collected and calculated by Prof. Aswath
+Damodaran, Professor of Finance at the Stern School of Business, New
+York University.  The raw data is available here:
+http://pages.stern.nyu.edu/~adamodar/New_Home_Page/data.html</description>
+      <updated-at>2014-03-23T03:11:33Z</updated-at>
+      <frequency>annual</frequency>
+      <from-date>1999-12-31</from-date>
+      <to-date>2011-12-31</to-date>
+      <column-names type="array">
+        <column-name>Date</column-name>
+        <column-name>Reinvestment Rate</column-name>
+      </column-names>
+      <private type="boolean">false</private>
+      <type nil="true"/>
+      <display-url>http://pages.stern.nyu.edu/~adamodar/New_Home_Page/data.html</display-url>
+      <premium type="boolean">false</premium>
+    </doc>
+    <doc>
+      <id type="integer">3732984</id>
+      <source-code>DMDRN</source-code>
+      <source-name>Damodaran Financial Data</source-name>
+      <code>IBM_REINV</code>
+      <name>International Business Machines Corp. ( IBM ) - Reinvestment Amount</name>
+      <urlize-name>International-Business-Machines-Corp-IBM-Reinvestment-Amount</urlize-name>
+      <description>Units: millions of dollars. Corporate Finance data is collected and calculated by Prof. Aswath
+Damodaran, Professor of Finance at the Stern School of Business, New
+York University.  The raw data is available here:
+http://pages.stern.nyu.edu/~adamodar/New_Home_Page/data.html</description>
+      <updated-at>2014-03-20T17:29:04Z</updated-at>
+      <frequency>annual</frequency>
+      <from-date>2000-12-31</from-date>
+      <to-date>2011-12-31</to-date>
+      <column-names type="array">
+        <column-name>Date</column-name>
+        <column-name>Reinvestment Amount</column-name>
+      </column-names>
+      <private type="boolean">false</private>
+      <type nil="true"/>
+      <display-url>http://pages.stern.nyu.edu/~adamodar/New_Home_Page/data.html</display-url>
+      <premium type="boolean">false</premium>
+    </doc>
+    <doc>
+      <id type="integer">3732957</id>
+      <source-code>DMDRN</source-code>
+      <source-name>Damodaran Financial Data</source-name>
+      <code>IBM_INST_HOLD</code>
+      <name>International Business Machines Corp. ( IBM ) - Institutional Holdings</name>
+      <urlize-name>International-Business-Machines-Corp-IBM-Institutional-Holdings</urlize-name>
+      <description>Number of shares held by mutual funds, pension funds and trusts as a percent of total stock outstanding. Units: %. Corporate Finance data is collected and calculated by Prof. Aswath
+Damodaran, Professor of Finance at the Stern School of Business, New
+York University.  The raw data is available here:
+http://pages.stern.nyu.edu/~adamodar/New_Home_Page/data.html</description>
+      <updated-at>2014-03-22T19:17:15Z</updated-at>
+      <frequency>annual</frequency>
+      <from-date>1999-12-31</from-date>
+      <to-date>2011-12-31</to-date>
+      <column-names type="array">
+        <column-name>Date</column-name>
+        <column-name>Institutional Holdings</column-name>
+      </column-names>
+      <private type="boolean">false</private>
+      <type nil="true"/>
+      <display-url>http://pages.stern.nyu.edu/~adamodar/New_Home_Page/data.html</display-url>
+      <premium type="boolean">false</premium>
+    </doc>
+    <doc>
+      <id type="integer">3732990</id>
+      <source-code>DMDRN</source-code>
+      <source-name>Damodaran Financial Data</source-name>
+      <code>IBM_ROE</code>
+      <name>International Business Machines Corp. ( IBM ) - Return on Equity</name>
+      <urlize-name>International-Business-Machines-Corp-IBM-Return-on-Equity</urlize-name>
+      <description>Estimated by dividing the net income by the book value of equity. If book value of equity is negative, this is not estimated. Units: %. Corporate Finance data is collected and calculated by Prof. Aswath
+Damodaran, Professor of Finance at the Stern School of Business, New
+York University.  The raw data is available here:
+http://pages.stern.nyu.edu/~adamodar/New_Home_Page/data.html</description>
+      <updated-at>2014-03-21T22:04:24Z</updated-at>
+      <frequency>annual</frequency>
+      <from-date>1999-12-31</from-date>
+      <to-date>2012-12-31</to-date>
+      <column-names type="array">
+        <column-name>Date</column-name>
+        <column-name>Return on Equity</column-name>
+      </column-names>
+      <private type="boolean">false</private>
+      <type nil="true"/>
+      <display-url>http://pages.stern.nyu.edu/~adamodar/New_Home_Page/data.html</display-url>
+      <premium type="boolean">false</premium>
+    </doc>
+  </docs>
+  <sources type="array">
+    <source>
+      <id type="integer">392</id>
+      <code>CBOE</code>
+      <datasets-count type="integer">10</datasets-count>
+      <description>No description for this source yet</description>
+      <name>Chicago Board Options Exchange</name>
+      <host>www.cboe.com</host>
+      <premium type="boolean">false</premium>
+    </source>
+    <source>
+      <id type="integer">393</id>
+      <code>GOOG</code>
+      <datasets-count type="integer">43144</datasets-count>
+      <description>This data is NOT sourced directly from Google.  It is however verified against their numbers.
+
+www.quandl.com/WIKI is a better source.</description>
+      <name>Google Finance</name>
+      <host>www.google.com</host>
+      <premium type="boolean">false</premium>
+    </source>
+    <source>
+      <id type="integer">394</id>
+      <code>YAHOO</code>
+      <datasets-count type="integer">39271</datasets-count>
+      <description>This data is NOT sourced directly from Yahoo.  It is however validated against Yahoo's data each day.</description>
+      <name>Yahoo Finance</name>
+      <host>ichart.finance.yahoo.com</host>
+      <premium type="boolean">false</premium>
+    </source>
+    <source>
+      <id type="integer">468</id>
+      <code>CBOEFE</code>
+      <datasets-count type="integer">447</datasets-count>
+      <description>No description for this source yet</description>
+      <name>CBOE Futures Exchange</name>
+      <host>cfe.cboe.com</host>
+      <premium type="boolean">false</premium>
+    </source>
+    <source>
+      <id type="integer">761</id>
+      <code>NYX</code>
+      <datasets-count type="integer">1482</datasets-count>
+      <description>No description for this source yet</description>
+      <name>NYSE Euronext</name>
+      <host>europeanequities.nyx.com</host>
+      <premium type="boolean">false</premium>
+    </source>
+    <source>
+      <id type="integer">5628</id>
+      <code>EURONEXT</code>
+      <datasets-count type="integer">0</datasets-count>
+      <description>No description for this source yet</description>
+      <name>Euronext Stock Exchange</name>
+      <host>europeanequities2.nyx.com</host>
+      <premium type="boolean">false</premium>
+    </source>
+    <source>
+      <id type="integer">6946</id>
+      <code>DMDRN</code>
+      <datasets-count type="integer">0</datasets-count>
+      <description></description>
+      <name>Damodaran Financial Data</name>
+      <host>pages.stern.nyu.edu/~adamodar/</host>
+      <premium type="boolean">false</premium>
+    </source>
+    <source>
+      <id type="integer">7330</id>
+      <code>SSE</code>
+      <datasets-count type="integer">0</datasets-count>
+      <description></description>
+      <name>Boerse Stuttgart</name>
+      <host>www.boerse-stuttgart.de</host>
+      <premium type="boolean">false</premium>
+    </source>
+    <source>
+      <id type="integer">7370</id>
+      <code>FINRA</code>
+      <datasets-count type="integer">0</datasets-count>
+      <description></description>
+      <name>Financial Industry Regulatory Authority</name>
+      <host>regsho.finra.org</host>
+      <premium type="boolean">false</premium>
+    </source>
+  </sources>
+</datasets>
