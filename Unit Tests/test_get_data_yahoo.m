@@ -186,7 +186,7 @@ end
 
 function test_4(testCase)
 symbol = 'VAS.AX';
-actual = get_data_yahoo(symbol, 'interval' ,'d');
+actual = get_data_yahoo(symbol, 'interval', 'd');
 expected = load('test_get_data_yahoo.mat', 'test_4');
 verifyEqual(testCase, actual.VAS_AX, expected.test_4.VAS_AX);
 end
@@ -251,7 +251,7 @@ end
 
 function test_10(testCase)
 symbol = {'GOOG', 'FB'};
-actual = get_data_yahoo(symbol, 'interval' ,'d');
+actual = get_data_yahoo(symbol, 'interval', 'd');
 expected = load('test_get_data_yahoo.mat', 'test_10');
 
 for i = 1:length(symbol)

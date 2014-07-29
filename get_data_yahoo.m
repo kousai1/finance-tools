@@ -39,11 +39,11 @@ function data = get_data_yahoo(symbol, varargin)
 %   from Yahoo! Finance for one or more stock symbols, with additional
 %   options specified by one or more name-value pair arguments:
 %
-%   'start'         The date of the most recent historic stock observation.
-%                   The value of 'start' may be a serial date number, or a
-%                   date string.
+%   'start'         The date of the least recent (ie oldest) historic stock
+%                   observation. The value of 'start' may be a serial date
+%                   number, or a date string.
 %
-%   'finish'        The date of the least recent historic stock
+%   'finish'        The date of the most recent (ie newest) historic stock
 %                   observation. The value of 'finish' may be a serial date
 %                   number, or a date string.
 %

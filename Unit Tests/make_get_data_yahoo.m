@@ -50,7 +50,7 @@ test_3 = get_data_yahoo(symbol, 'start', start, ...
     'finish', finish, 'format', 'numeric');
 
 symbol = 'VAS.AX';
-test_4 = get_data_yahoo(symbol, 'interval' ,'d');
+test_4 = get_data_yahoo(symbol, 'interval', 'd');
 
 symbol = 'VGB.AX';
 test_5 = get_data_yahoo(symbol, 'start', '03-10-2012', ...
@@ -76,7 +76,7 @@ test_9 = get_data_yahoo(symbol, 'start', start, ...
     'finish', finish, 'format', 'numeric');
 
 symbol = {'GOOG', 'FB'};
-test_10 = get_data_yahoo(symbol, 'interval' ,'d');
+test_10 = get_data_yahoo(symbol, 'interval', 'd');
 
 symbol = {'COKE', 'PEP'};
 test_11 = get_data_yahoo(symbol, 'start', '03-10-2012', ...
