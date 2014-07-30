@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasets>
+  <total-count type="integer">0</total-count>
+  <current-page type="integer">1</current-page>
+  <per-page type="integer">20</per-page>
+  <docs type="array"/>
+</datasets>

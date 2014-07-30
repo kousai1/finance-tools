@@ -68,13 +68,20 @@ verifyError(testCase, actual, expected);
 end
 
 %%
-% The following test function verifies that CONVERT_QUANDL returns the
-% correct set of data.
+% The following group of test functions verify that CONVERT_QUANDL returns
+% the correct set of data.
 function test_1(testCase)
-document = xmlread('test_convert_quandl.xml');
+document = xmlread('test_1_convert_quandl.xml');
 actual = convert_quandl(document);
 expected = load('test_convert_quandl.mat', 'test_1');
 verifyEqual(testCase, actual, expected.test_1);
+end
+
+function test_2(testCase)
+document = xmlread('test_2_convert_quandl.xml');
+actual = convert_quandl(document);
+expected = load('test_convert_quandl.mat', 'test_2');
+verifyEqual(testCase, actual, expected.test_2);
 end
 
 %%
