@@ -68,6 +68,11 @@ end
 function s = convert_node(node)
 children = node.getChildNodes;
 
+if children.getLength == 0
+    s = '';
+    return;
+end
+
 for i = 1:children.getLength
     child = children.item(i - 1);
 
