@@ -31,7 +31,6 @@
 % This script produces the set of data that TEST_CONVERT_QUANDL uses as its
 % reference.
 current_path = pwd;
-addpath(pwd);
 cd ../
 
 document = xmlread('test_1_convert_quandl.xml');
@@ -41,7 +40,5 @@ document = xmlread('test_2_convert_quandl.xml');
 test_2 = convert_quandl(document);
 
 cd(current_path);
-rmpath(pwd);
-
 save('test_convert_quandl', 'test_1', 'test_2');
 clear all;
