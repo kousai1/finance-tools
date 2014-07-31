@@ -41,4 +41,4 @@ test_2 = convert_quandl(document);
 
 cd(current_path);
 save('test_convert_quandl', 'test_1', 'test_2');
-clear all;
+clearvars -except token;

@@ -1,7 +1,7 @@
 %% File and license information.
 %**************************************************************************
 %
-%   File:           make_search_quandl.m
+%   File:           make_suite.m
 %   Module:         Input Analysis
 %   Project:        Portfolio Optimisation
 %   Workspace:      Finance Tools
@@ -28,26 +28,10 @@
 %
 %**************************************************************************
 
-% This script produces the set of data that TEST_SEARCH_QUANDL uses as its
-% reference. Before running the script, ensure that there is a valid global
-% Quandl authentication token present in the MATLAB workspace.
-global token;
+% This script runs all make scripts. Before running the script, ensure that
+% there is a valid global Quandl authentication token present in the MATLAB
+% workspace.
 
-current_path = pwd;
-cd ../
-
-test_1 = search_quandl('mUsNrbU&@I{W"UcsA"P', 'token', token);
-
-test_2 = search_quandl('FNZ', 'token', token);
-
-test_3 = search_quandl('IBM', 'count', 25, 'token', token);
-
-test_4 = search_quandl('VEU', 'filter', 'GOOG', 'token', token);
-
-test_5 = search_quandl('HPQ', 'count', 50, 'filter', 'GOOG', ...
-    'token', token);
-
-cd(current_path);
-save('test_search_quandl', 'test_1', 'test_2', 'test_3', 'test_4', ...
-    'test_5');
-clearvars -except token;
+make_get_data_yahoo;
+make_convert_quandl;
+make_search_quandl;
