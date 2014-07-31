@@ -1,0 +1,244 @@
+function result = search_quandl(query, varargin)
+% SEARCH_QUANDL Search Quandl.
+%   RESULT = SEARCH_QUANDL(QUERY) queries the Quandl search engine. QUERY
+%   must be a character string.
+%
+%   RESULT is a N-by-16 structure array, where N is the number of search
+%   results.
+%
+%   RESULT structures contain the following field names and values:
+%
+%   Name            | Value
+%   --------------- | -----
+%   id              | Double
+%   source_code     | Character String
+%   source_name     | Character String
+%   code            | Character String
+%   name            | Character String
+%   urlize_name     | Character String
+%   description     | Character String
+%   updated_at      | Character String
+%   frequency       | Character String
+%   from_date       | Character String
+%   to_date         | Character String
+%   column_names    | Character String
+%   private         | Character String
+%   type            | Character String
+%   display_url     | Character String
+%   premium         | Character String
+%
+%   When called without options, SEARCH_QUANDL returns the first 20 search
+%   results from all Quandl data feeds.
+%
+%   RESULT = SEARCH_QUANDL(QUERY, NAME, VALUE) queries the Quandl search
+%   engine, with additional options specified by one or more name-value
+%   pair arguments:
+%
+%   'count'         The maximum number of search results to return. The
+%                   value of 'count' may be an integer, or the character
+%                   string 'all'. The later should be used with caution. 
+%
+%   'filter'        The search result filter. The value of 'filter' may be
+%                   any valid Quandl data feed code. This includes (but is
+%                   not limited to) the following:
+%
+%                   'GOOG'      Google Finance
+%                   'WIKI'      Quandl Open Data
+%                   'YAHOO'     Yahoo! Finance
+%
+%   'token'         Quandl authentication token. Unregistered Quandl users
+%                   are limited to 50 API calls per day. Registered Quandl
+%                   users are issued an authentication token that allows
+%                   unlimited downloads and API access.
+%
+%   Example:
+%       results = SEARCH_QUANDL('FNZ');
+%
+%   Example:
+%       results = SEARCH_QUANDL('IBM', 'count', 25);
+%
+%   Example:
+%       results = SEARCH_QUANDL('VEU', 'filter', 'GOOG', ...
+%           'token', 'dsahFHUiewjjd');
+%
+%   Note that the value of 'token' in the example above is fake, and will
+%   not work.
+%
+%   See also CONVERT_QUANDL.
+
+%% File and license information.
+%**************************************************************************
+%
+%   File:           search_quandl.m
+%   Module:         Input Analysis
+%   Project:        Portfolio Optimisation
+%   Workspace:      Finance Tools
+%
+%   Author:         Rodney Elliott
+%   Date:           29 July 2014
+%
+%**************************************************************************
+%
+%   Copyright:      (c) 2014 Rodney Elliott
+%
+%   This program is free software: you can redistribute it and/or modify
+%   it under the terms of the GNU General Public License as published by
+%   the Free Software Foundation, either version 3 of the License, or
+%   (at your option) any later version.
+%
+%   This program is distributed in the hope that it will be useful,
+%   but WITHOUT ANY WARRANTY; without even the implied warranty of
+%   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+%   GNU General Public License for more details.
+%
+%   You should have received a copy of the GNU General Public License
+%   along with this program. If not, see <http://www.gnu.org/licenses/>.
+%
+%**************************************************************************
+
+%% Parse input.
+% SEARCH_QUANDL accepts one required input argument, and three optional
+% name-value pair arguments. The easiest way to check these arguments is
+% by using the 'inputParser' class and its associated methods.
+p = inputParser;
+addRequired(p, 'query', @check_query);
+addParameter(p, 'count', [], @check_count);
+addParameter(p, 'filter', [], @check_filter);
+addParameter(p, 'token', [], @check_token);
+parse(p, query, varargin{:});
+
+count = p.Results.count;
+filter = p.Results.filter;
+token = p.Results.token;
+
+%% Prepare query.
+% Quandl uses the '+' character to separate multiple search terms. Before
+% the query can be submitted, all ' ' characters within the query string
+% must therefore be replaced.
+query_url = 'http://www.quandl.com/api/v1/datasets.xml?';
+
+if ~isempty(token)
+    token_field = ['auth_token=' token '&'];
+else
+    token_field = '';
+end
+
+query = regexprep(query, ' ', '+');
+query_field = ['query=' query '&'];
+
+per_page = 20;
+per_page_field = ['per_page=' num2str(per_page) '&'];
+
+page = 1;
+page_field = ['page=' num2str(page)];
+
+%% Submit query.
+% Before entering the query loop, an initial query is made so that the
+% search metadata can be examined. This contains a great deal of useful
+% information, including the total number of search results generated by
+% the query, in addition to a list of data feeds, and the number of search
+% results that each feed has contributed to the total. If the query
+% returned no search results, or if there are no search results from the
+% data feed specified using the 'filter' name-value pair argument, then
+% there is no point in running the query loop.
+result = [];
+
+try
+    document = xmlread([query_url token_field query_field ...
+        per_page_field page_field], 'Timeout', '10');
+catch
+    error('search_quandl:no_connection', ...
+        ['No connection. Failed to get DOM node for query:\r\n' ...
+        '''%s''\r\nCheck the network connection.'], query);
+end
+
+datasets = convert_quandl(document);
+total_count = datasets.total_count;
+
+if total_count == 0
+    return;
+end
+
+if ~isempty(filter)
+    is_source = false;
+    
+    for i = 1:length(datasets.sources.source)
+        if strcmp(datasets.sources.source(i).code, filter)
+            is_source = true;
+            break;
+        end
+    end
+    
+    if is_source == false
+        return;
+    end
+end
+
+%%
+% The query loop
+if isempty(count)
+    count = 20;
+elseif strcmp(count, 'all')
+    count = total_count;
+end
+
+is_complete = false;
+search_count = 0;
+
+while is_complete == false
+    try
+        document = xmlread([query_url token_field query_field ...
+            per_page_field page_field], 'Timeout', '10');
+    catch
+        error('search_quandl:no_connection', ...
+            ['No connection. Failed to get DOM node for query:\r\n' ...
+            '''%s''\r\nCheck the network connection.'], query);
+    end
+    
+    datasets = convert_quandl(document);
+    
+    for i = 1:length(datasets.docs.doc)
+        search_count = search_count + 1;
+        
+        if isempty(filter)
+            result = [result datasets.docs.doc(i)];
+        elseif strcmp(datasets.docs.doc(i).source_code, filter)
+            result = [result datasets.docs.doc(i)];
+        end
+        
+        if length(result) == count
+            is_complete = true;
+            break;
+        elseif search_count == total_count
+            is_complete = true;
+            break;
+        end
+    end
+    
+    page = page + 1;
+    page_field = ['page=' num2str(page)];
+end
+end
+
+%% Local functions.
+function check_query(query)
+validateattributes(query, {'char'}, {'row'});
+end
+
+function check_count(count)
+if isnumeric(count)
+    validateattributes(count, {'numeric'}, ...
+        {'scalar', 'positive', 'integer'});
+else
+    validateattributes(count, {'char'}, {'row'});
+    validatestring(count, {'all'});
+end
+end
+
+function check_filter(filter)
+validateattributes(filter, {'char'}, {'row'});
+end
+
+function check_token(token)
+validateattributes(token, {'char'}, {'row'});
+end
