@@ -207,5 +207,4 @@ end
 % MATLAB workspace.
 function teardownOnce(testCase)
 cd(testCase.TestData.origPath);
-clear all;
 end

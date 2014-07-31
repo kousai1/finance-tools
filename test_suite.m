@@ -28,6 +28,10 @@
 %
 %**************************************************************************
 
+% This script runs all test units. Before running the script, ensure that
+% there is a valid global Quandl authentication token present in the MATLAB
+% workspace.
+
 addpath(pwd);
 
 results = runtests(pwd, 'Recursively', true);
