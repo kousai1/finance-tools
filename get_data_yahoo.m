@@ -75,7 +75,7 @@ function data = get_data_yahoo(symbol, varargin)
 %
 %   Example:
 %       symbol = {'WAB', 'GE'};
-%       data = get_data_yahoo(symbol, 'start', '27-01-2012', ...
+%       data = GET_DATA_YAHOO(symbol, 'start', '27-01-2012', ...
 %           'finish', '17-07-2014', 'format', 'dd-mm-yyyy');
 %
 %   See also TEST_GET_DATA_YAHOO.
