@@ -175,7 +175,7 @@ if ~isempty(filter)
 end
 
 %%
-% The query loop
+% The query loop.
 if isempty(count)
     count = 20;
 elseif strcmp(count, 'all')

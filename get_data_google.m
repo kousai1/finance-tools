@@ -258,7 +258,7 @@ for i = 1:length(symbol)
     end
 end
 
-%%
+%% Process input.
 % At this point, all stock symbols comply with the Yahoo! Finance naming
 % convention. The next step is to modify the stock symbols so that they
 % comply with the Google Finance naming convention. For foreign stocks,
@@ -345,6 +345,7 @@ end
 date_field = ['&startdate=' datestr(start_field, 'yyyy-mm-dd') ...
     '&enddate=' datestr(finish_field, 'yyyy-mm-dd') '&num=200'];
 
+%% Make REST requests.
 for i = 1:length(symbol)
     is_complete = false;
     data_array = [];
