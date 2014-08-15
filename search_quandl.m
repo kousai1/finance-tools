@@ -187,10 +187,7 @@ while is_complete == false
             result = [result datasets.docs.doc(i)];
         end
         
-        if length(result) == count
-            is_complete = true;
-            break;
-        elseif search_count == total_count
+        if search_count == count
             is_complete = true;
             break;
         end
