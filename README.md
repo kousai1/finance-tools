@@ -72,6 +72,7 @@ Finance Tools is released under the [GNU General Public License][gpl],
 with the following exceptions:
 
 * *get_data_yahoo.m*, which is released under the [BSD 2-Clause License][bsd].
+* *get_data_google.m*, which is released under the [BSD 2-Clause License][bsd].
 
 Authors
 =======
