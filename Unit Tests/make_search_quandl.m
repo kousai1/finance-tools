@@ -37,15 +37,25 @@ current_path = pwd;
 cd ../
 
 test_1 = search_quandl('mUsNrbU&@I{W"UcsA"P', 'token', token);
+disp('Created test_1 dataset.');
+pause(1);
 
 test_2 = search_quandl('FNZ', 'token', token);
+disp('Created test_2 dataset.');
+pause(1);
 
 test_3 = search_quandl('IBM', 'count', 25, 'token', token);
+disp('Created test_3 dataset.');
+pause(1);
 
 test_4 = search_quandl('VEU', 'filter', 'GOOG', 'token', token);
+disp('Created test_4 dataset.');
+pause(1);
 
 test_5 = search_quandl('HPQ', 'count', 50, 'filter', 'GOOG', ...
     'token', token);
+disp('Created test_5 dataset.');
+pause(1);
 
 cd(current_path);
 save('test_search_quandl', 'test_1', 'test_2', 'test_3', 'test_4', ...

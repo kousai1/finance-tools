@@ -35,9 +35,13 @@ cd ../
 
 document = xmlread('test_1_convert_quandl.xml');
 test_1 = convert_quandl(document);
+disp('Created test_1 dataset.');
+pause(1);
 
 document = xmlread('test_2_convert_quandl.xml');
 test_2 = convert_quandl(document);
+disp('Created test_2 dataset.');
+pause(1);
 
 cd(current_path);
 save('test_convert_quandl', 'test_1', 'test_2');
