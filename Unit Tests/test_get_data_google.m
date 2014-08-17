@@ -169,7 +169,7 @@ function test_1(testCase)
 symbol = 'FNZ.NZ';
 actual = get_data_google(symbol);
 expected = load('test_get_data_google.mat', 'test_1');
-verifyEqual(testCase, actual.NZE_FNZ, expected.test_1.NZE_FNZ);
+verifyTrue(testCase, isequaln(actual.NZE_FNZ, expected.test_1.NZE_FNZ));
 end
 
 function test_2(testCase)
@@ -177,7 +177,7 @@ symbol = 'VEU.AX';
 actual = get_data_google(symbol, 'start', '27-01-2012', ...
     'finish', '17-07-2014', 'format', 'dd-mm-yyyy');
 expected = load('test_get_data_google.mat', 'test_2');
-verifyEqual(testCase, actual.ASX_VEU, expected.test_2.ASX_VEU);
+verifyTrue(testCase, isequaln(actual.ASX_VEU, expected.test_2.ASX_VEU));
 end
 
 function test_3(testCase)
@@ -187,14 +187,14 @@ finish = datenum('16-07-2014', 'dd-mm-yyyy');
 actual = get_data_google(symbol, 'start', start, ...
     'finish', finish, 'format', 'numeric');
 expected = load('test_get_data_google.mat', 'test_3');
-verifyEqual(testCase, actual.ASX_VAP, expected.test_3.ASX_VAP);
+verifyTrue(testCase, isequaln(actual.ASX_VAP, expected.test_3.ASX_VAP));
 end
 
 function test_4(testCase)
 symbol = 'VAS.AX';
 actual = get_data_google(symbol, 'interval', 'd');
 expected = load('test_get_data_google.mat', 'test_4');
-verifyEqual(testCase, actual.ASX_VAS, expected.test_4.ASX_VAS);
+verifyTrue(testCase, isequaln(actual.ASX_VAS, expected.test_4.ASX_VAS));
 end
 
 function test_5(testCase)
@@ -202,7 +202,7 @@ symbol = 'VGB.AX';
 actual = get_data_google(symbol, 'start', '03-10-2012', ...
     'finish', '16-07-2014', 'format', 'dd-mm-yyyy', 'interval', 'w');
 expected = load('test_get_data_google.mat', 'test_5');
-verifyEqual(testCase, actual.ASX_VGB, expected.test_5.ASX_VGB);
+verifyTrue(testCase, isequaln(actual.ASX_VGB, expected.test_5.ASX_VGB));
 end
 
 function test_6(testCase)
@@ -212,15 +212,15 @@ finish = datenum('17-07-2014', 'dd-mm-yyyy');
 actual = get_data_google(symbol, 'start', start, ...
     'finish', finish, 'format', 'numeric', 'interval', 'm');
 expected = load('test_get_data_google.mat', 'test_6');
-verifyEqual(testCase, actual.ASX_VTS, expected.test_6.ASX_VTS);
+verifyTrue(testCase, isequaln(actual.ASX_VTS, expected.test_6.ASX_VTS));
 end
 
 function test_7(testCase)
 symbol = {'IBM', 'HPQ'};
 actual = get_data_google(symbol);
 expected = load('test_get_data_google.mat', 'test_7');
-verifyEqual(testCase, actual.NYSE_IBM, expected.test_7.NYSE_IBM);
-verifyEqual(testCase, actual.NYSE_HPQ, expected.test_7.NYSE_HPQ);
+verifyTrue(testCase, isequaln(actual.NYSE_IBM, expected.test_7.NYSE_IBM));
+verifyTrue(testCase, isequaln(actual.NYSE_HPQ, expected.test_7.NYSE_HPQ));
 end
 
 function test_8(testCase)
@@ -228,8 +228,8 @@ symbol = {'WAB', 'GE'};
 actual = get_data_google(symbol, 'start', '27-01-2012', ...
     'finish', '17-07-2014', 'format', 'dd-mm-yyyy');
 expected = load('test_get_data_google.mat', 'test_8');
-verifyEqual(testCase, actual.NYSE_WAB, expected.test_8.NYSE_WAB);
-verifyEqual(testCase, actual.NYSE_GE, expected.test_8.NYSE_GE);
+verifyTrue(testCase, isequaln(actual.NYSE_WAB, expected.test_8.NYSE_WAB));
+verifyTrue(testCase, isequaln(actual.NYSE_GE, expected.test_8.NYSE_GE));
 end
 
 function test_9(testCase)
@@ -239,16 +239,20 @@ finish = datenum('16-07-2014', 'dd-mm-yyyy');
 actual = get_data_google(symbol, 'start', start, ...
     'finish', finish, 'format', 'numeric');
 expected = load('test_get_data_google.mat', 'test_9');
-verifyEqual(testCase, actual.NASDAQ_MSFT, expected.test_9.NASDAQ_MSFT);
-verifyEqual(testCase, actual.NASDAQ_AAPL, expected.test_9.NASDAQ_AAPL);
+verifyTrue(testCase, isequaln(actual.NASDAQ_MSFT, ...
+    expected.test_9.NASDAQ_MSFT));
+verifyTrue(testCase, isequaln(actual.NASDAQ_AAPL, ...
+    expected.test_9.NASDAQ_AAPL));
 end
 
 function test_10(testCase)
 symbol = {'GOOG', 'FB'};
 actual = get_data_google(symbol, 'interval', 'd');
 expected = load('test_get_data_google.mat', 'test_10');
-verifyEqual(testCase, actual.NASDAQ_GOOG, expected.test_10.NASDAQ_GOOG);
-verifyEqual(testCase, actual.NASDAQ_FB, expected.test_10.NASDAQ_FB);
+verifyTrue(testCase, isequaln(actual.NASDAQ_GOOG, ...
+    expected.test_10.NASDAQ_GOOG));
+verifyTrue(testCase, isequaln(actual.NASDAQ_FB, ...
+    expected.test_10.NASDAQ_FB));
 end
 
 function test_11(testCase)
@@ -256,8 +260,10 @@ symbol = {'COKE', 'PEP'};
 actual = get_data_google(symbol, 'start', '03-10-2012', ...
     'finish', '16-07-2014', 'format', 'dd-mm-yyyy', 'interval', 'w');
 expected = load('test_get_data_google.mat', 'test_11');
-verifyEqual(testCase, actual.NASDAQ_COKE, expected.test_11.NASDAQ_COKE);
-verifyEqual(testCase, actual.NYSE_PEP, expected.test_11.NYSE_PEP);
+verifyTrue(testCase, isequaln(actual.NASDAQ_COKE, ...
+    expected.test_11.NASDAQ_COKE));
+verifyTrue(testCase, isequaln(actual.NYSE_PEP, ...
+    expected.test_11.NYSE_PEP));
 end
 
 function test_12(testCase)
@@ -267,8 +273,8 @@ finish = datenum('17-07-2014', 'dd-mm-yyyy');
 actual = get_data_google(symbol, 'start', start, ...
     'finish', finish, 'format', 'numeric', 'interval', 'm');
 expected = load('test_get_data_google.mat', 'test_12');
-verifyEqual(testCase, actual.NYSE_F, expected.test_12.NYSE_F);
-verifyEqual(testCase, actual.NYSE_TM, expected.test_12.NYSE_TM);
+verifyTrue(testCase, isequaln(actual.NYSE_F, expected.test_12.NYSE_F));
+verifyTrue(testCase, isequaln(actual.NYSE_TM, expected.test_12.NYSE_TM));
 end
 
 %%

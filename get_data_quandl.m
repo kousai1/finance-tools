@@ -31,7 +31,7 @@ function data = get_data_quandl(symbol, varargin)
 %   contain nothing but zeros in these two columns, it indicates that the
 %   stock has never had a dividend or split action occur.
 %
-%   DATA uses not-a-number (NaN) to indicate missing data.
+%   GET_DATA_QUANDL uses not-a-number (NaN) to indicate missing data.
 %
 %   When called without options, GET_DATA_QUANDL gets the complete set of
 %   daily stock observations for each symbol. Stock prices are returned in

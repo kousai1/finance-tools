@@ -31,6 +31,8 @@ function data = get_data_yahoo(symbol, varargin)
 %   contain nothing but zeros in these two columns, it indicates that the
 %   stock has never had a dividend or split action occur.
 %
+%   GET_DATA_YAHOO uses not-a-number (NaN) to indicate missing data.
+%
 %   When called without options, GET_DATA_YAHOO gets the complete set of
 %   daily stock observations for each symbol. Stock prices are returned in
 %   the currency used by the exchange on which the stock is listed.

@@ -9,7 +9,7 @@ function data = get_data_google(symbol, varargin)
 %   complete list of stock exchanges supported by Yahoo! Finance may be
 %   found <a href="matlab:web('http://tinyurl.com/g2caw')">here</a>.
 %
-%   DATA is a NUMOBS-by-6-by-NUMSYM table, where NUMOBS is the number of
+%   DATA is a NUMOBS-by-8-by-NUMSYM table, where NUMOBS is the number of
 %   stock observations, and NUMSYM is the number of stock symbols.
 %
 %   DATA contains the following columns of data:
@@ -22,9 +22,16 @@ function data = get_data_google(symbol, varargin)
 %   4      | Low
 %   5      | Close
 %   6      | Volume
+%   7      | Dividend
+%   8      | Split
 %
 %   The 'Date' column contains serial date numbers in ascending order (ie
 %   oldest first).
+%
+%   GET_DATA_GOOGLE uses not-a-number (NaN) to indicate missing data. At
+%   present, dividend and split data is not available for download from
+%   Google Finance, and so DATA columns seven and eight are filled with
+%   NaNs.
 %
 %   When called without options, GET_DATA_GOOGLE gets one year's worth of
 %   daily stock observations for each symbol. Stock prices are returned in
@@ -425,10 +432,12 @@ for i = 1:length(symbol)
     end
     
     data_table = table(datenum(data_array(:, 1), 'mmm dd, yyyy'), ...
-            str2double(data_array(:, 2)), str2double(data_array(:, 3)), ...
-            str2double(data_array(:, 4)), str2double(data_array(:, 5)), ...
-            str2double(data_array(:, 6)), 'VariableNames', ...
-            {'Date', 'Open', 'High', 'Low', 'Close', 'Volume'});
+        str2double(data_array(:, 2)), str2double(data_array(:, 3)), ...
+        str2double(data_array(:, 4)), str2double(data_array(:, 5)), ...
+        str2double(data_array(:, 6)), NaN(length(data_array(:, 1)), 1), ...
+        NaN(length(data_array(:, 1)), 1), 'VariableNames', ...
+        {'Date', 'Open', 'High', 'Low', 'Close', 'Volume', ...
+        'Dividend', 'Split'});
         
     data.(matlab.lang.makeValidName(symbol{i})) = data_table;
 end
