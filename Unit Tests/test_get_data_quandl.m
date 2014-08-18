@@ -79,36 +79,15 @@ expected = 'MATLAB:expectedRow';
 verifyError(testCase, actual, expected);
 end
 
-% Because the Yahoo! Finance stock lookup service returns a result string
-% for the fictional stock symbol 'SYMBOL', its reflection is used in the
-% following test function instead.
-function test_symbol_invalid_value_1(testCase)
-actual = @()get_data_quandl('LOBMYS');
-expected = 'get_data_quandl:invalid_value';
-verifyError(testCase, actual, expected);
-end
-
-function test_symbol_invalid_value_2(testCase)
-actual = @()get_data_quandl('BMW.BE');
-expected = 'get_data_quandl:invalid_value';
-verifyError(testCase, actual, expected);
-end
-
 function test_feed_no_value(testCase)
 actual = @()get_data_quandl('SYMBOL', 'feed');
 expected = 'MATLAB:InputParser:ParamMissingValue';
 verifyError(testCase, actual, expected);
 end
 
-function test_feed_invalid_value_1(testCase)
+function test_feed_invalid_value(testCase)
 actual = @()get_data_quandl('SYMBOL', 'feed', 'FEED');
 expected = 'MATLAB:unrecognizedStringChoice';
-verifyError(testCase, actual, expected);
-end
-
-function test_feed_invalid_value_2(testCase)
-actual = @()get_data_quandl('BMW.BE', 'feed', 'GOOG');
-expected = 'get_data_quandl:invalid_value';
 verifyError(testCase, actual, expected);
 end
 
@@ -345,7 +324,6 @@ verifyTrue(testCase, isequaln(actual.ASX_VAP, expected.test_15.ASX_VAP));
 end
 
 function test_16(testCase)
-global token;
 symbol = 'VAS.AX';
 actual = get_data_quandl(symbol, 'feed', 'GOOG', 'interval', 'd');
 expected = load('test_get_data_quandl.mat', 'test_16');

@@ -288,17 +288,26 @@ end
 % convention. If the user has selected Yahoo! Finance as the data feed,
 % then no further checks of the stock symbols are required. If the user has
 % selected a different data feed however, then the stock symbols will need 
-% to undergo further checks. In the case of the Quandl open data feed, this
-% involves checking that none of the symbols has an exchange suffix. This
-% is because the Quandl open data feed supports the AMEX, NASDAQ, and NYSE
-% exchanges only, and Yahoo! Finance does not assign North American stocks
-% an exchange suffix.
+% to undergo further checks.
+good_symbol = {};
+
+if strcmp(feed, 'YAHOO')
+    good_symbol = symbol;
+end
+
+%%
+% In the case of the Quandl open data feed, this involves checking that
+% none of the symbols has an exchange suffix. This is because the Quandl
+% open data feed supports the AMEX, NASDAQ, and NYSE exchanges only, and
+% Yahoo! Finance does not assign North American stocks an exchange suffix.
 if isempty(feed) || strcmp(feed, 'WIKI')
     for i = 1:length(symbol)
         if ~isempty(strfind(symbol{i}, '.'))
-            error('get_data_quandl:invalid_value', ...
+            warning('get_data_quandl:invalid_value', ...
                 ['Invalid value. The stock symbol:\r\n''%s''\r\n' ...
                 'contains an unsupported exchange code.'], symbol{i});
+        else
+            good_symbol = [good_symbol, symbol{i}];
         end
     end
 end
@@ -338,12 +347,12 @@ if strcmp(feed, 'GOOG')
             match = regexp(html_string, expression, 'once', 'match');
 
             if isempty(match)
-                error('get_data_quandl:invalid_value', ...
+                warning('get_data_quandl:invalid_value', ...
                     ['Invalid value. The stock symbol:' ...
                     '\r\n''%s''\r\n does not exist.'], symbol{i});
             else
                 match = regexprep(match, ':', '_');
-                symbol{i} = match;
+                good_symbol = [good_symbol, match];
             end
 
         else
@@ -352,9 +361,10 @@ if strcmp(feed, 'GOOG')
             prefix = EXCHANGE_CODES(row, 2);
 
             if ~isempty(prefix{1})
-                symbol{i} = [prefix{1} '_' char(split{1})];
+                this_symbol = [prefix{1} '_' char(split{1})];
+                good_symbol = [good_symbol, this_symbol];
             else
-                error('get_data_quandl:invalid_value', ...
+                warning('get_data_quandl:invalid_value', ...
                     ['Invalid value. The exchange:\r\n%s\r\nis not ' ...
                     'supported by Google Finance.'], ...
                     char(EXCHANGE_CODES(row, 3)));
@@ -422,8 +432,8 @@ end
 % for a particular stock symbol varies by data feed, along with the column
 % names. This is handled by comparing the name of each column of data with
 % a list of alternative, acceptable names.
-for i = 1:length(symbol)
-    symbol_field = [symbol{i} '.xml?exclude_data=true'];
+for i = 1:length(good_symbol)
+    symbol_field = [good_symbol{i} '.xml?exclude_data=true'];
     
     try
         document = xmlread([price_url feed_field symbol_field ...
@@ -431,13 +441,13 @@ for i = 1:length(symbol)
     catch
         error('get_data_quandl:no_connection', ...
             ['No connection. Failed to get DOM node for symbol:\r\n' ...
-            '''%s''\r\nCheck the network connection.'], symbol{i});
+            '''%s''\r\nCheck the network connection.'], good_symbol{i});
     end
     
     datasets = convert_quandl(document);
     column_count = length(datasets.column_names);
     
-    symbol_field = [symbol{i} '.csv?'];
+    symbol_field = [good_symbol{i} '.csv?'];
     
     try
         price_string = urlread([price_url feed_field symbol_field ...
@@ -446,7 +456,7 @@ for i = 1:length(symbol)
         error('get_data_quandl:no_connection', ...
             ['No connection. Failed to get price data for symbol:' ...
             '\r\n''%s''\r\nCheck the date range, and/or network ' ...
-            'connection.'], symbol{i});
+            'connection.'], good_symbol{i});
     end
     
     format_specification = '%s';
@@ -491,7 +501,7 @@ for i = 1:length(symbol)
         {'Date', 'Open', 'High', 'Low', 'Close', 'Volume', ...
         'Dividend', 'Split'});
     
-    data.(matlab.lang.makeValidName(symbol{i})) = data_table;
+    data.(matlab.lang.makeValidName(good_symbol{i})) = data_table;
 end
 end
 
