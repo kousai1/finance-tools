@@ -279,6 +279,7 @@ end
 % information is to send the stock symbol in a query to Google Finance,
 % then parse the result.
 finance_url = 'https://www.google.com/finance?q=';
+good_symbol = {};
 
 for i = 1:length(symbol)
     split = regexp(symbol{i}, '\.', 'split');
@@ -298,11 +299,11 @@ for i = 1:length(symbol)
         match = regexp(html_string, expression, 'once', 'match');
         
         if isempty(match)
-            error('get_data_google:invalid_value', ...
+            warning('get_data_google:invalid_value', ...
                 ['Invalid value. The stock symbol:\r\n''%s''\r\n does ' ...
                 'not exist.'], symbol{i});
         else
-            symbol{i} = match;
+            good_symbol = [good_symbol, match];
         end
         
     else
@@ -311,9 +312,10 @@ for i = 1:length(symbol)
         prefix = EXCHANGE_CODES(row, 2);
 
         if ~isempty(prefix{1})
-            symbol{i} = [prefix{1} ':' char(split{1})];
+            this_symbol = [prefix{1} ':' char(split{1})];
+            good_symbol = [good_symbol, this_symbol];
         else
-            error('get_data_google:invalid_value', ...
+            warning('get_data_google:invalid_value', ...
                 ['Invalid value. The exchange:\r\n%s\r\nis not ' ...
                 'supported by Google Finance.'], ...
                 char(EXCHANGE_CODES(row, 3)));
@@ -353,20 +355,20 @@ date_field = ['&startdate=' datestr(start_field, 'yyyy-mm-dd') ...
     '&enddate=' datestr(finish_field, 'yyyy-mm-dd') '&num=200'];
 
 %% Make REST requests.
-for i = 1:length(symbol)
+for i = 1:length(good_symbol)
     is_complete = false;
     data_array = [];
     table_row = 0;
         
     while ~is_complete
         try
-            price_string = urlread([price_url symbol{i} date_field ...
+            price_string = urlread([price_url good_symbol{i} date_field ...
                 '&start=' num2str(table_row)]);
         catch
             error('get_data_google:no_connection', ...
                 ['No connection. Failed to get price data for symbol:' ...
                 '\r\n''%s''\r\nCheck the date range, and/or network ' ...
-                'connection.'], symbol{i});
+                'connection.'], good_symbol{i});
         end
         
         price_string = regexp(price_string, ...
@@ -439,7 +441,7 @@ for i = 1:length(symbol)
         {'Date', 'Open', 'High', 'Low', 'Close', 'Volume', ...
         'Dividend', 'Split'});
         
-    data.(matlab.lang.makeValidName(symbol{i})) = data_table;
+    data.(matlab.lang.makeValidName(good_symbol{i})) = data_table;
 end
 end
 

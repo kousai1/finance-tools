@@ -79,21 +79,6 @@ expected = 'MATLAB:expectedRow';
 verifyError(testCase, actual, expected);
 end
 
-% Because the Yahoo! Finance stock lookup service returns a result string
-% for the fictional stock symbol 'SYMBOL', its reflection is used in the
-% following test function instead.
-function test_symbol_invalid_value_1(testCase)
-actual = @()get_data_google('LOBMYS');
-expected = 'get_data_google:invalid_value';
-verifyError(testCase, actual, expected);
-end
-
-function test_symbol_invalid_value_2(testCase)
-actual = @()get_data_google('BMW.BE');
-expected = 'get_data_google:invalid_value';
-verifyError(testCase, actual, expected);
-end
-
 function test_start_no_value(testCase)
 actual = @()get_data_google('SYMBOL', 'start');
 expected = 'MATLAB:InputParser:ParamMissingValue';
