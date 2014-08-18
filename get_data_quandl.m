@@ -503,6 +503,10 @@ for i = 1:length(good_symbol)
     
     data.(matlab.lang.makeValidName(good_symbol{i})) = data_table;
 end
+
+if isempty(good_symbol)
+    data = [];
+end
 end
 
 %% Local functions.
