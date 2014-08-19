@@ -28,10 +28,16 @@
 %
 %**************************************************************************
 
-% This script runs all make scripts. Before running the script, ensure that
-% there is a valid global Quandl authentication token present in the MATLAB
+% This script calls all make scripts, and should be run before making any
+% changes to the codebase. Its purpose is to generate a set of reference
+% data that is used by the test suite to verify that none of the changes
+% that are made have broken the codebase. Before running this script, make
+% sure there is a valid Quandl authentication token present in the MATLAB
 % workspace.
 
-make_get_data_yahoo;
 make_convert_quandl;
 make_search_quandl;
+
+make_get_data_yahoo;
+make_get_data_google;
+make_get_data_quandl;

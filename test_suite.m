@@ -28,9 +28,12 @@
 %
 %**************************************************************************
 
-% This script runs all test units. Before running the script, ensure that
-% there is a valid global Quandl authentication token present in the MATLAB
-% workspace.
+% This script calls all test units. It should be run after making changes
+% to the codebase. Its purpose is to verify that none of the changes that
+% were made have broken the codebase. Before making any changes, the make
+% suite should first be called to generate a set of reference data. Before
+% running this script, make sure there is a valid Quandl authentication
+% token present in the MATLAB workspace.
 
 addpath(pwd);
 
