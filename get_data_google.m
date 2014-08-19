@@ -4,15 +4,15 @@ function data = get_data_google(symbol, varargin)
 %   Finance for one or more stock symbols. SYMBOL may be a character
 %   string, or a cell array of character strings.
 %
-%   Stock symbols must adhere to the Yahoo! Finance naming convention,
-%   which places an exchange suffix after all foreign stock symbols. A
+%   Stock symbols must comply with the Yahoo! Finance naming convention,
+%   which gives all foreign (non-US) stock symbols an exchange suffix. A
 %   complete list of stock exchanges supported by Yahoo! Finance may be
 %   found <a href="matlab:web('http://tinyurl.com/g2caw')">here</a>.
 %
-%   DATA is a NUMOBS-by-8-by-NUMSYM table, where NUMOBS is the number of
-%   stock observations, and NUMSYM is the number of stock symbols.
-%
-%   DATA contains the following columns of data:
+%   DATA is a structure array containing NUMSYM fields, where NUMSYM is the
+%   number of stock symbols. Each field contains a NUMOBS-by-8 table, where
+%   NUMOBS is the number of stock observations. Each table contains the
+%   following columns of data:
 %
 %   Column | Description
 %   ------ | -----------
@@ -26,16 +26,16 @@ function data = get_data_google(symbol, varargin)
 %   8      | Split
 %
 %   The 'Date' column contains serial date numbers in ascending order (ie
-%   oldest first).
-%
-%   GET_DATA_GOOGLE uses not-a-number (NaN) to indicate missing data. At
-%   present, dividend and split data is not available for download from
-%   Google Finance, and so DATA columns seven and eight are filled with
-%   NaNs.
+%   oldest first). The 'Dividend' and 'Split' columns contain zeros except
+%   for dates on which a dividend or split action occurred. Should a table
+%   contain nothing but zeros in these two columns, it indicates that the
+%   stock has never had a dividend or split action occur. Missing data is
+%   indicated by not-a-number (NaN).
 %
 %   When called without options, GET_DATA_GOOGLE gets one year's worth of
-%   daily stock observations for each symbol. Stock prices are returned in
-%   the currency used by the exchange on which the stock is listed.
+%   daily stock observations from Google Finance for each symbol. Stock
+%   prices are quoted in the currency used by the exchange on which the
+%   stock is listed.
 %
 %   DATA = GET_DATA_GOOGLE(SYMBOL, NAME, VALUE) gets historic stock data
 %   from Google Finance for one or more stock symbols, with additional
@@ -73,7 +73,7 @@ function data = get_data_google(symbol, varargin)
 %       data = GET_DATA_GOOGLE('FNZ.NZ');
 %
 %   Example:
-%       data = GET_DATA_GOOGLE('VAS.AX', 'interval', 'd');
+%       data = GET_DATA_GOOGLE('VAS.AX', 'interval', 'w');
 %
 %   Example:
 %       symbol = {'WAB', 'GE'};
@@ -269,15 +269,13 @@ end
 % At this point, all stock symbols comply with the Yahoo! Finance naming
 % convention. The next step is to modify the stock symbols so that they
 % comply with the Google Finance naming convention. For foreign stocks,
-% all that is required is to swap the Yahoo! Finance exchange suffix for
-% the appropriate Google Finance exchange prefix - providing that Google
-% Finance supports the exchange in question that is. The situation with
-% North American stocks is more complex however. Because Yahoo! Finance
-% does not assign North American stocks an exchange suffix, it is not
-% possible to determine which Google Finance exchange prefix to apply
-% without further information. The simplest way to obtain the required
-% information is to send the stock symbol in a query to Google Finance,
-% then parse the result.
+% this involves replacing the Yahoo! Finance exchange suffix with the
+% corresponding Google Finance exchange prefix. For US stocks, the
+% situation is more complex. Because Yahoo! Finance does not assign US
+% stocks an exchange suffix, it is not possible to determine the correct
+% Google Finance exchange prefix without further information. The simplest
+% way to obtain the necessary information is to send the stock symbol in a
+% query to Google Finance, and parse the result.
 finance_url = 'https://www.google.com/finance?q=';
 good_symbol = {};
 
@@ -285,7 +283,7 @@ for i = 1:length(symbol)
     split = regexp(symbol{i}, '\.', 'split');
     
     if length(split) == 1
-        % North American stock symbol.
+        % US stock symbol.
         try
             html_string = urlread([finance_url symbol{i}], 'Timeout', 10);
         catch
@@ -325,11 +323,9 @@ end
 
 %% Prepare REST requests.
 % Google Finance does not make its historic stock data available for
-% download in the same way that Yahoo! Finance does. Instead, stock data
+% download in CSV format as Yahoo! Finance does. Instead, stock data
 % must be scraped from a series of HTML tables. Each table can hold up to
-% 200 price daily observations. Because the interval of the table data is
-% fixed, any required interval changes are made after the HTML tables for
-% each symbol have been collated.
+% 200 price daily observations.
 price_url = 'http://www.google.com/finance/historical?q=';
 
 if ~isempty(start)
@@ -341,12 +337,13 @@ if ~isempty(start)
         finish_field = datenum(finish, format);
     end
 else
-    % Leonardo da Vinci's date of birth. Note that unlike GET_DATA_YAHOO,
-    % this simply results in a year's worth of historic stock data being
-    % returned. In order to obtain the complete set of daily historic stock
-    % observations, the value of 'start' must match the date of the oldest
-    % Google Finance stock observation for the symbol. This data is held
-    % within an Adobe Flash chart, and is not accessible programmatically.
+    % Leonardo da Vinci's date of birth. Google Finance, unlike Yahoo!
+    % Finance, interprets this date as being invalid, and returns one
+    % year's worth of historic price data instead of the complete set,
+    % which is very annoying. In order to return all historic price data,
+    % the value of 'start' must match the date of Google Finance's first
+    % price observation for the stock. This data is held within an Adobe
+    % Flash chart, and is not available programmatically.
     start_field = datenum('15-04-1452', 'dd-mm-yyyy');
     finish_field = now;
 end
@@ -355,6 +352,9 @@ date_field = ['&startdate=' datestr(start_field, 'yyyy-mm-dd') ...
     '&enddate=' datestr(finish_field, 'yyyy-mm-dd') '&num=200'];
 
 %% Make REST requests.
+% Because the interval of the HTML table data is fixed, any necessary
+% changes are made after the HTML tables for each symbol have been
+% collated.
 for i = 1:length(good_symbol)
     is_complete = false;
     data_array = [];
@@ -388,8 +388,9 @@ for i = 1:length(good_symbol)
     data_array = flipud(data_array);
     date_array = datenum(data_array(:, 1), 'mmm dd, yyyy');
     
-    % A three-point local minima is used to identify Mondays (for weekly
-    % intervals), and the first of the month (for monthly intervals).
+    % A three-point local minima is used to identify Mondays (the day used
+    % for weekly intervals), and the first of the month (the day used for
+    % monthly intervals).
     if strcmp(interval, 'w')
         day_number = weekday(date_array);
         index = [];

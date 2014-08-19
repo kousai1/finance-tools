@@ -3,10 +3,8 @@ function result = search_quandl(query, varargin)
 %   RESULT = SEARCH_QUANDL(QUERY) queries the Quandl search engine. QUERY
 %   must be a character string.
 %
-%   RESULT is a N-by-16 structure array, where N is the number of search
-%   results.
-%
-%   RESULT structures contain the following field names and values:
+%   RESULT is a structure array containing N fields, where N is the number
+%   of search results. Each result contains the following fields:
 %
 %   Name            | Value
 %   --------------- | -----

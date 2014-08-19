@@ -4,15 +4,15 @@ function data = get_data_quandl(symbol, varargin)
 %   one or more stock symbols. SYMBOL must be a character string, or a cell
 %   array of character strings.
 %
-%   Stock symbols must adhere to the Yahoo! Finance naming convention,
-%   which places an exchange suffix after all foreign stock symbols. A
+%   Stock symbols must comply with the Yahoo! Finance naming convention,
+%   which gives all foreign (non-US) stock symbols an exchange suffix. A
 %   complete list of stock exchanges supported by Yahoo! Finance may be
 %   found <a href="matlab:web('http://tinyurl.com/g2caw')">here</a>.
 %
-%   DATA is a NUMOBS-by-8-by-NUMSYM table, where NUMOBS is the number of
-%   stock observations, and NUMSYM is the number of stock symbols.
-%
-%   DATA contains the following columns of data:
+%   DATA is a structure array containing NUMSYM fields, where NUMSYM is the
+%   number of stock symbols. Each field contains a NUMOBS-by-8 table, where
+%   NUMOBS is the number of stock observations. Each table contains the
+%   following columns of data:
 %
 %   Column | Description
 %   ------ | -----------
@@ -27,19 +27,19 @@ function data = get_data_quandl(symbol, varargin)
 %
 %   The 'Date' column contains serial date numbers in ascending order (ie
 %   oldest first). The 'Dividend' and 'Split' columns contain zeros except
-%   for dates on which a dividend or split action occurred. Should DATA
+%   for dates on which a dividend or split action occurred. Should a table
 %   contain nothing but zeros in these two columns, it indicates that the
-%   stock has never had a dividend or split action occur.
-%
-%   GET_DATA_QUANDL uses not-a-number (NaN) to indicate missing data.
+%   stock has never had a dividend or split action occur. Missing data is
+%   indicated by not-a-number (NaN).
 %
 %   When called without options, GET_DATA_QUANDL gets the complete set of
-%   daily stock observations for each symbol. Stock prices are returned in
-%   the currency used by the exchange on which the stock is listed.
+%   daily stock observations from Quandl open data for each symbol. Stock
+%   prices are quoted in the currency used by the exchange on which the
+%   stock is listed.
 %
 %   DATA = GET_DATA_QUANDL(SYMBOL, NAME, VALUE) gets historic stock data
-%   from Yahoo! Finance for one or more stock symbols, with additional
-%   options specified by one or more name-value pair arguments:
+%   from Quandl for one or more stock symbols, with additional options
+%   specified by one or more name-value pair arguments:
 %
 %   'feed'          The Quandl data feed from which to get historic stock
 %                   data. The value of 'feed' must be one of the following:
@@ -299,7 +299,7 @@ end
 % In the case of the Quandl open data feed, this involves checking that
 % none of the symbols has an exchange suffix. This is because the Quandl
 % open data feed supports the AMEX, NASDAQ, and NYSE exchanges only, and
-% Yahoo! Finance does not assign North American stocks an exchange suffix.
+% Yahoo! Finance does not assign US stocks an exchange suffix.
 if isempty(feed) || strcmp(feed, 'WIKI')
     for i = 1:length(symbol)
         if ~isempty(strfind(symbol{i}, '.'))
@@ -315,15 +315,13 @@ end
 %%
 % In the case of the Google Finance data feed, it is necessary to convert
 % symbols from the Yahoo! Finance naming convention to the Google Finance
-% naming convention. For foreign stocks, all that is required is to swap
-% the Yahoo! Finance exchange suffix for the appropriate Google Finance
-% exchange prefix - providing that Google Finance supports the exchange in
-% question that is. The situation with North American stocks is more
-% complex however. Because Yahoo! Finance does not assign North American
-% stocks an exchange suffix, it is not possible to determine which Google
-% Finance exchange prefix to apply without further information. The
-% simplest way to obtain the required information is to send the stock
-% symbol in a query to Google Finance, then parse the result.
+% naming convention. For foreign stocks, this involves replacing the Yahoo!
+% Finance exchange suffix with the corresponding Google Finance exchange
+% prefix. For US stocks, the situation is more complex. Because Yahoo!
+% Finance does not assign US stocks an exchange suffix, it is not possible
+% to determine the correct Google Finance exchange prefix without further
+% information. The simplest way to obtain the necessary information is to
+% send the stock symbol in a query to Google Finance, and parse the result.
 finance_url = 'https://www.google.com/finance?q=';
 
 if strcmp(feed, 'GOOG')
@@ -331,7 +329,7 @@ if strcmp(feed, 'GOOG')
         split = regexp(symbol{i}, '\.', 'split');
 
         if length(split) == 1
-            % North American stock symbol.
+            % US stock symbol.
             try
                 html_string = urlread([finance_url symbol{i}], ...
                     'Timeout', 10);
@@ -374,9 +372,9 @@ if strcmp(feed, 'GOOG')
 end
 
 %% Prepare REST requests.
-% A single REST request is made to Quandl for each stock symbol, with data
-% being returned in CSV format. Each request consists of a base URL, and a
-% number of optional query parameters.
+% A single REST request is made to Quandl for each stock symbol, Each
+% request consists of a base URL, and a number of optional query
+% parameters.
 price_url = 'http://www.quandl.com/api/v1/datasets/';
 
 if ~isempty(feed)
@@ -468,8 +466,8 @@ for i = 1:length(good_symbol)
     price_data = textscan(price_string, format_specification, ...
         'HeaderLines', 1, 'Delimiter', ',');
     
-    % The following code assumes that all Quandl data feeds store their
-    % date information in the first column of data.
+    % The following code assumes that Quandl data feeds store their date
+    % information in the first column of data.
     data_array = datenum(price_data{1}, 'yyyy-mm-dd');
     is_column = false;
      
@@ -491,7 +489,7 @@ for i = 1:length(good_symbol)
     
     % Quandl open data feed fills the split column with ones on days that
     % no split action takes place. This differs from the zero fill used by
-    % GET_DATA_YAHOO, and so it is changed here for consistency.
+    % Yahoo! Finance, and so it is changed here for consistency.
     unity_rows = data_array(:, 8) == 1;
     data_array(unity_rows, 8) = 0;
     

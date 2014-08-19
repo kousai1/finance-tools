@@ -4,15 +4,15 @@ function data = get_data_yahoo(symbol, varargin)
 %   Finance for one or more stock symbols. SYMBOL may be a character
 %   string, or a cell array of character strings.
 %
-%   Stock symbols must adhere to the Yahoo! Finance naming convention,
-%   which places an exchange suffix after all foreign stock symbols. A
+%   Stock symbols must comply with the Yahoo! Finance naming convention,
+%   which gives all foreign (non-US) stock symbols an exchange suffix. A
 %   complete list of stock exchanges supported by Yahoo! Finance may be
 %   found <a href="matlab:web('http://tinyurl.com/g2caw')">here</a>.
 %
-%   DATA is a NUMOBS-by-8-by-NUMSYM table, where NUMOBS is the number of
-%   stock observations, and NUMSYM is the number of stock symbols.
-%
-%   DATA contains the following columns of data:
+%   DATA is a structure array containing NUMSYM fields, where NUMSYM is the
+%   number of stock symbols. Each field contains a NUMOBS-by-8 table, where
+%   NUMOBS is the number of stock observations. Each table contains the
+%   following columns of data:
 %
 %   Column | Description
 %   ------ | -----------
@@ -27,15 +27,15 @@ function data = get_data_yahoo(symbol, varargin)
 %
 %   The 'Date' column contains serial date numbers in ascending order (ie
 %   oldest first). The 'Dividend' and 'Split' columns contain zeros except
-%   for dates on which a dividend or split action occurred. Should DATA
+%   for dates on which a dividend or split action occurred. Should a table
 %   contain nothing but zeros in these two columns, it indicates that the
-%   stock has never had a dividend or split action occur.
-%
-%   GET_DATA_YAHOO uses not-a-number (NaN) to indicate missing data.
+%   stock has never had a dividend or split action occur. Missing data is
+%   indicated by not-a-number (NaN).
 %
 %   When called without options, GET_DATA_YAHOO gets the complete set of
-%   daily stock observations for each symbol. Stock prices are returned in
-%   the currency used by the exchange on which the stock is listed.
+%   daily stock observations from Yahoo! Finance for each symbol. Stock
+%   prices are quoted in the currency used by the exchange on which the
+%   stock is listed.
 %
 %   DATA = GET_DATA_YAHOO(SYMBOL, NAME, VALUE) gets historic stock data
 %   from Yahoo! Finance for one or more stock symbols, with additional
@@ -73,7 +73,7 @@ function data = get_data_yahoo(symbol, varargin)
 %       data = GET_DATA_YAHOO('FNZ.NZ');
 %
 %   Example:
-%       data = GET_DATA_YAHOO('VAS.AX', 'interval', 'd');
+%       data = GET_DATA_YAHOO('VAS.AX', 'interval', 'w');
 %
 %   Example:
 %       symbol = {'WAB', 'GE'};
@@ -206,15 +206,11 @@ end
 
 %% Prepare REST requests.
 % Two REST requests are made to Yahoo! Finance for each stock symbol. The
-% first returns price and volume data in CSV format, while the second
-% returns dividend and split data, again in CSV format. Each request
-% consists of a base URL, and a number of optional query parameters. Note
-% that the value of 'start' used below has been chosen to ensure that
-% GET_DATA_YAHOO returns the complete set of historic price and dividend
-% data whenever it is called without options. To learn more about the
-% Yahoo! Finance REST API, please see the following links:
-% <http://tinyurl.com/mxe54fs one>, <http://tinyurl.com/n34obls two>, and
-% <http://tinyurl.com/m3kbyn2 three>.
+% first returns price and volume data, while the second returns dividend
+% and split data. Each request consists of a base URL, and a number of
+% optional query parameters. To learn more about the Yahoo! Finance REST
+% API, please see the following links: <http://tinyurl.com/mxe54fs one>,
+% <http://tinyurl.com/n34obls two>, and <http://tinyurl.com/m3kbyn2 three>.
 price_url = 'http://ichart.finance.yahoo.com/table.csv?s=';
 dividend_url = 'http://ichart.finance.yahoo.com/x?s=';
 
@@ -227,7 +223,10 @@ if ~isempty(start)
         finish_field = datenum(finish, format);
     end
 else
-    % Leonardo da Vinci's date of birth.
+    % Leonardo da Vinci's date of birth. This has been chosen as the
+    % default 'start' date as it occurs well before the advent of all
+    % modern stock exchanges, thus ensuring that the complete set of
+    % historic price and dividend data is returned.
     start_field = datenum('15-04-1452', 'dd-mm-yyyy');
     finish_field = now;
 end
@@ -247,23 +246,23 @@ else
 end
 
 %%
-% The 'y' and 'z' parameters in the split field are not documented in any
-% of the previous Yahoo! Finance links. A little experimentation reveals
-% that the 'z' parameter specifies the total number of observations to
-% return, starting with the most recent. In this context, an observation
+% The purpose of the 'y' and 'z' parameters in the dividend field is not
+% documented in any of the previous Yahoo! Finance links. Experimentation
+% reveals that the 'z' parameter specifies the total number of observations
+% to return, starting with the most recent. In this context, an observation
 % may be either a dividend or split action. The 'y' parameter specifies the
 % number of observations to skip, again starting with the most recent. Thus
-% a 'z' value of 20 and a 'y' value of 5 will result in the 5 most recent
+% a 'z' value of 20 and a 'y' value of 5 would result in the 5 most recent
 % observations being skipped, and the next 20 being returned.
 dividend_field = '&g=v&y=0&z=10000';
 terminal_field = '&ignore=.csv';
 
 %% Make REST requests.
-% The price and volume data returned by Yahoo! Finance is homogeneous,
-% whilst the dividend and split data is heterogeneous. As a result, they
-% must be processed differently. Note that the following code assumes that
-% dividend and split actions always occur on days for which stock data is
-% available.
+% Price and volume data returned by Yahoo! Finance is homogeneous, whilst
+% dividend and split data is heterogeneous. As a result, they are processed
+% differently. Note that the following code assumes that dividend and split
+% actions occur on days when the markets are open. This ensures that price
+% data is available for that day.
 for i = 1:length(symbol)
     symbol_field = symbol{i};
     
@@ -292,15 +291,16 @@ for i = 1:length(symbol)
     catch
         error('get_data_yahoo:no_connection', ...
             ['No connection. Failed to get dividend data for symbol:' ...
-            '\r\n''%s''\r\nCheck the network connection.'], symbol{i});
+            '\r\n''%s''\r\nCheck the date range, and/or network ' ...
+            'connection.'], symbol{i});
     end
 
     mixed_data = textscan(dividend_string, '%s%s%s', ...
         'HeaderLines', 1, 'Delimiter', ',');
     
     % In addition to containing header information, 'dividend_string' also
-    % contains footer information. The former is skipped by 'textscan',
-    % whilst the later is ignored by the following loop.
+    % contains four rows of footer information. The former is skipped by
+    % 'textscan', whilst the later is ignored by the following loop.
     for j = 1:(length(mixed_data{1}) - 4)
         if strcmp(mixed_data{1}(j), 'DIVIDEND')
             date = datenum(mixed_data{2}(j), 'yyyymmdd');
