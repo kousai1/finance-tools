@@ -336,15 +336,11 @@ if ~isempty(start)
         start_field = datenum(start, format);
         finish_field = datenum(finish, format);
     end
-else
-    % Leonardo da Vinci's date of birth. Google Finance, unlike Yahoo!
-    % Finance, interprets this date as being invalid, and returns one
-    % year's worth of historic price data instead of the complete set,
-    % which is very annoying. In order to return all historic price data,
-    % the value of 'start' must match the date of Google Finance's first
-    % price observation for the stock. This data is held within an Adobe
-    % Flash chart, and is not available programmatically.
-    start_field = datenum('15-04-1452', 'dd-mm-yyyy');
+else    
+    % The start of the Unix epoch. Experimentation reveals that using this
+    % as the 'start' date ensures that the complete set of historic price
+    % data is returned.
+    start_field = datenum('01-01-1970', 'dd-mm-yyyy');
     finish_field = now;
 end
 

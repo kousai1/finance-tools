@@ -35,9 +35,13 @@
 % sure there is a valid Quandl authentication token present in the MATLAB
 % workspace.
 
+disp('Creating CONVERT_QUANDL datasets...');
 make_convert_quandl;
+disp('Creating SEARCH_QUANDL datasets...');
 make_search_quandl;
-
+disp('Creating GET_DATA_YAHOO datasets...');
 make_get_data_yahoo;
+disp('Creating GET_DATA_GOOGLE datasets...');
 make_get_data_google;
+disp('Creating GET_DATA_QUANDL datasets...');
 make_get_data_quandl;
