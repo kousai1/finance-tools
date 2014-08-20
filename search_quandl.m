@@ -176,23 +176,27 @@ while is_complete == false
     
     datasets = convert_quandl(document);
     
-    for i = 1:length(datasets.docs.doc)
-        search_count = search_count + 1;
-        
-        if isempty(filter)
-            result = [result datasets.docs.doc(i)];
-        elseif strcmp(datasets.docs.doc(i).source_code, filter)
-            result = [result datasets.docs.doc(i)];
+    if ~isempty(datasets.docs)
+        for i = 1:length(datasets.docs.doc)
+            search_count = search_count + 1;
+
+            if isempty(filter)
+                result = [result datasets.docs.doc(i)];
+            elseif strcmp(datasets.docs.doc(i).source_code, filter)
+                result = [result datasets.docs.doc(i)];
+            end
+
+            if search_count == count
+                is_complete = true;
+                break;
+            end
         end
-        
-        if search_count == count
-            is_complete = true;
-            break;
-        end
+
+        page = page + 1;
+        page_field = ['page=' num2str(page)];
+    else
+        is_complete = true;
     end
-    
-    page = page + 1;
-    page_field = ['page=' num2str(page)];
 end
 end
 
