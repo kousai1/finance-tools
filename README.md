@@ -1,6 +1,6 @@
 About
 =====
-Finance tools is a loose collection of finance-related MATLAB scripts and
+Finance Tools is a loose collection of finance-related MATLAB scripts and
 functions. Its primary objectives are:
 
 1.  To provide investors with a set of command-line tools that may be used

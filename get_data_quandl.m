@@ -97,7 +97,7 @@ function data = get_data_quandl(symbol, varargin)
 %   Note that the value of 'token' in the example above is fake, and will
 %   not work.
 %
-%   See also TEST_GET_DATA_QUANDL.
+%   See also GET_DATA_GOOGLE, GET_DATA_YAHOO.
 
 %% File and license information.
 %**************************************************************************

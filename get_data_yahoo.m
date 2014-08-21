@@ -80,7 +80,7 @@ function data = get_data_yahoo(symbol, varargin)
 %       data = GET_DATA_YAHOO(symbol, 'start', '27-01-2012', ...
 %           'finish', '17-07-2014', 'format', 'dd-mm-yyyy');
 %
-%   See also TEST_GET_DATA_YAHOO.
+%   See also GET_DATA_GOOGLE, GET_DATA_QUANDL.
 
 %% File and license information.
 %**************************************************************************

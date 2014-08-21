@@ -10,7 +10,7 @@ function datasets = convert_quandl(document)
 %       document = xmlread(query, 'Timeout', 10);
 %       datasets = CONVERT_QUANDL(document);
 %
-%   See also TEST_CONVERT_QUANDL.
+%   See also GET_DATA_QUANDL.
 
 %% File and license information.
 %**************************************************************************
@@ -70,7 +70,7 @@ children = node.getChildNodes;
 
 if children.getLength == 0
     s = '';
-    return;
+    return
 end
 
 for i = 1:children.getLength

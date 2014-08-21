@@ -150,7 +150,7 @@ datasets = convert_quandl(document);
 total_count = datasets.total_count;
 
 if total_count == 0
-    return;
+    return
 end
 
 %%
@@ -188,7 +188,7 @@ while is_complete == false
 
             if search_count == count
                 is_complete = true;
-                break;
+                break
             end
         end
 

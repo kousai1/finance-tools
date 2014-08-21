@@ -80,7 +80,7 @@ function data = get_data_google(symbol, varargin)
 %       data = GET_DATA_GOOGLE(symbol, 'start', '27-01-2012', ...
 %           'finish', '17-07-2014', 'format', 'dd-mm-yyyy');
 %
-%   See also TEST_GET_DATA_GOOGLE.
+%   See also GET_DATA_GOOGLE, GET_DATA_YAHOO.
 
 %% File and license information.
 %**************************************************************************
