@@ -337,10 +337,10 @@ if ~isempty(start)
         finish_field = datenum(finish, format);
     end
 else    
-    % The start of the Unix epoch. Experimentation reveals that using this
-    % as the 'start' date ensures that the complete set of historic price
-    % data is returned.
-    start_field = datenum('01-01-1970', 'dd-mm-yyyy');
+    % One year after the start of the Unix epoch. Experimentation reveals
+    % that using this as the 'start' date ensures that the complete set of
+    % historic price data is returned.
+    start_field = datenum('01-01-1971', 'dd-mm-yyyy');
     finish_field = now;
 end
 
