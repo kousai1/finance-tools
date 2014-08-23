@@ -38,82 +38,109 @@ cd ../
 
 symbol = 'FNZ.NZ';
 test_1 = get_data_google(symbol);
-disp('Created test_1 dataset.');
-pause(1);
+disp('Created test_1 dataset.')
+pause(1)
 
 symbol = 'VEU.AX';
-test_2 = get_data_google(symbol, 'start', '27-01-2012', ...
-    'finish', '17-07-2014', 'format', 'dd-mm-yyyy');
-disp('Created test_2 dataset.');
-pause(1);
+test_2 = get_data_google(symbol, ...
+    'start', '27-01-2012', ...
+    'finish', '17-07-2014', ...
+    'format', 'dd-mm-yyyy');
+disp('Created test_2 dataset.')
+pause(1)
 
 symbol = 'VAP.AX';
 start = datenum('07-05-2012', 'dd-mm-yyyy');
 finish = datenum('16-07-2014', 'dd-mm-yyyy');
-test_3 = get_data_google(symbol, 'start', start, ...
-    'finish', finish, 'format', 'numeric');
-disp('Created test_3 dataset.');
-pause(1);
+test_3 = get_data_google(symbol, ...
+    'start', start, ...
+    'finish', finish, ...
+    'format', 'numeric');
+disp('Created test_3 dataset.')
+pause(1)
 
 symbol = 'VAS.AX';
-test_4 = get_data_google(symbol, 'interval', 'd');
-disp('Created test_4 dataset.');
-pause(1);
+test_4 = get_data_google(symbol, ...
+    'interval', 'd');
+disp('Created test_4 dataset.')
+pause(1)
 
 symbol = 'VGB.AX';
-test_5 = get_data_google(symbol, 'start', '03-10-2012', ...
-    'finish', '16-07-2014', 'format', 'dd-mm-yyyy', 'interval', 'w');
-disp('Created test_5 dataset.');
-pause(1);
+test_5 = get_data_google(symbol, ...
+    'start', '03-10-2012', ...
+    'finish', '16-07-2014', ...
+    'format', 'dd-mm-yyyy', ...
+    'interval', 'w');
+disp('Created test_5 dataset.')
+pause(1)
 
 symbol = 'VTS.AX';
 start = datenum('14-10-2011', 'dd-mm-yyyy');
 finish = datenum('17-07-2014', 'dd-mm-yyyy');
-test_6 = get_data_google(symbol, 'start', start, ...
-    'finish', finish, 'format', 'numeric', 'interval', 'm');
-disp('Created test_6 dataset.');
-pause(1);
+test_6 = get_data_google(symbol, ...
+    'start', start, ...
+    'finish', finish, ...
+    'format', 'numeric', ...
+    'interval', 'm');
+disp('Created test_6 dataset.')
+pause(1)
 
 symbol = {'IBM', 'HPQ'};
 test_7 = get_data_google(symbol);
-disp('Created test_7 dataset.');
-pause(1);
+disp('Created test_7 dataset.')
+pause(1)
 
 symbol = {'WAB', 'GE'};
-test_8 = get_data_google(symbol, 'start', '27-01-2012', ...
-    'finish', '17-07-2014', 'format', 'dd-mm-yyyy');
-disp('Created test_8 dataset.');
-pause(1);
+test_8 = get_data_google(symbol, ...
+    'start', '27-01-2012', ...
+    'finish', '17-07-2014', ...
+    'format', 'dd-mm-yyyy');
+disp('Created test_8 dataset.')
+pause(1)
 
 symbol = {'MSFT', 'AAPL'};
 start = datenum('07-05-2012', 'dd-mm-yyyy');
 finish = datenum('16-07-2014', 'dd-mm-yyyy');
-test_9 = get_data_google(symbol, 'start', start, ...
-    'finish', finish, 'format', 'numeric');
-disp('Created test_9 dataset.');
-pause(1);
+test_9 = get_data_google(symbol, ...
+    'start', start, ...
+    'finish', finish, ...
+    'format', 'numeric');
+disp('Created test_9 dataset.')
+pause(1)
 
 symbol = {'GOOG', 'FB'};
-test_10 = get_data_google(symbol, 'interval', 'd');
-disp('Created test_10 dataset.');
-pause(1);
+test_10 = get_data_google(symbol, ...
+    'interval', 'd');
+disp('Created test_10 dataset.')
+pause(1)
 
 symbol = {'COKE', 'PEP'};
-test_11 = get_data_google(symbol, 'start', '03-10-2012', ...
-    'finish', '16-07-2014', 'format', 'dd-mm-yyyy', 'interval', 'w');
-disp('Created test_11 dataset.');
-pause(1);
+test_11 = get_data_google(symbol, ...
+    'start', '03-10-2012', ...
+    'finish', '16-07-2014', ...
+    'format', 'dd-mm-yyyy', ...
+    'interval', 'w');
+disp('Created test_11 dataset.')
+pause(1)
 
-symbol = {'F', 'TM'};
+symbol = {'F', 'GM'};
 start = datenum('14-10-2011', 'dd-mm-yyyy');
 finish = datenum('17-07-2014', 'dd-mm-yyyy');
-test_12 = get_data_google(symbol, 'start', start, ...
-    'finish', finish, 'format', 'numeric', 'interval', 'm');
-disp('Created test_12 dataset.');
-pause(1);
+test_12 = get_data_google(symbol, ...
+    'start', start, ...
+    'finish', finish, ...
+    'format', 'numeric', ...
+    'interval', 'm');
+disp('Created test_12 dataset.')
+pause(1)
 
-cd(current_path);
+symbol = 'BMW.BE';
+test_13 = get_data_google(symbol);
+disp('Created test_13 dataset.')
+pause(1)
+
+cd(current_path)
 save('test_get_data_google', 'test_1', 'test_2', 'test_3', 'test_4', ...
     'test_5', 'test_6', 'test_7', 'test_8', 'test_9', 'test_10', ...
-    'test_11', 'test_12');
-clearvars -except token;
+    'test_11', 'test_12', 'test_13')
+clearvars -except token

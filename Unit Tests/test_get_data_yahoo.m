@@ -168,8 +168,10 @@ end
 
 function test_2(testCase)
 symbol = 'VEU.AX';
-actual = get_data_yahoo(symbol, 'start', '27-01-2012', ...
-    'finish', '17-07-2014', 'format', 'dd-mm-yyyy');
+actual = get_data_yahoo(symbol, ...
+    'start', '27-01-2012', ...
+    'finish', '17-07-2014', ...
+    'format', 'dd-mm-yyyy');
 expected = load('test_get_data_yahoo.mat', 'test_2');
 verifyEqual(testCase, actual.VEU_AX, expected.test_2.VEU_AX);
 end
@@ -178,23 +180,29 @@ function test_3(testCase)
 symbol = 'VAP.AX';
 start = datenum('07-05-2012', 'dd-mm-yyyy');
 finish = datenum('16-07-2014', 'dd-mm-yyyy');
-actual = get_data_yahoo(symbol, 'start', start, ...
-    'finish', finish, 'format', 'numeric');
+actual = get_data_yahoo(symbol, ...
+    'start', start, ...
+    'finish', finish, ...
+    'format', 'numeric');
 expected = load('test_get_data_yahoo.mat', 'test_3');
 verifyEqual(testCase, actual.VAP_AX, expected.test_3.VAP_AX);
 end
 
 function test_4(testCase)
 symbol = 'VAS.AX';
-actual = get_data_yahoo(symbol, 'interval', 'd');
+actual = get_data_yahoo(symbol, ...
+    'interval', 'd');
 expected = load('test_get_data_yahoo.mat', 'test_4');
 verifyEqual(testCase, actual.VAS_AX, expected.test_4.VAS_AX);
 end
 
 function test_5(testCase)
 symbol = 'VGB.AX';
-actual = get_data_yahoo(symbol, 'start', '03-10-2012', ...
-    'finish', '16-07-2014', 'format', 'dd-mm-yyyy', 'interval', 'w');
+actual = get_data_yahoo(symbol, ...
+    'start', '03-10-2012', ...
+    'finish', '16-07-2014', ...
+    'format', 'dd-mm-yyyy', ...
+    'interval', 'w');
 expected = load('test_get_data_yahoo.mat', 'test_5');
 verifyEqual(testCase, actual.VGB_AX, expected.test_5.VGB_AX);
 end
@@ -203,8 +211,11 @@ function test_6(testCase)
 symbol = 'VTS.AX';
 start = datenum('14-10-2011', 'dd-mm-yyyy');
 finish = datenum('17-07-2014', 'dd-mm-yyyy');
-actual = get_data_yahoo(symbol, 'start', start, ...
-    'finish', finish, 'format', 'numeric', 'interval', 'm');
+actual = get_data_yahoo(symbol, ...
+    'start', start, ...
+    'finish', finish, ...
+    'format', 'numeric', ...
+    'interval', 'm');
 expected = load('test_get_data_yahoo.mat', 'test_6');
 verifyEqual(testCase, actual.VTS_AX, expected.test_6.VTS_AX);
 end
@@ -223,8 +234,10 @@ end
 
 function test_8(testCase)
 symbol = {'WAB', 'GE'};
-actual = get_data_yahoo(symbol, 'start', '27-01-2012', ...
-    'finish', '17-07-2014', 'format', 'dd-mm-yyyy');
+actual = get_data_yahoo(symbol, ...
+    'start', '27-01-2012', ...
+    'finish', '17-07-2014', ...
+    'format', 'dd-mm-yyyy');
 expected = load('test_get_data_yahoo.mat', 'test_8');
 
 for i = 1:length(symbol)
@@ -238,8 +251,10 @@ function test_9(testCase)
 symbol = {'MSFT', 'AAPL'};
 start = datenum('07-05-2012', 'dd-mm-yyyy');
 finish = datenum('16-07-2014', 'dd-mm-yyyy');
-actual = get_data_yahoo(symbol, 'start', start, ...
-    'finish', finish, 'format', 'numeric');
+actual = get_data_yahoo(symbol, ...
+    'start', start, ...
+    'finish', finish, ...
+    'format', 'numeric');
 expected = load('test_get_data_yahoo.mat', 'test_9');
 
 for i = 1:length(symbol)
@@ -251,7 +266,8 @@ end
 
 function test_10(testCase)
 symbol = {'GOOG', 'FB'};
-actual = get_data_yahoo(symbol, 'interval', 'd');
+actual = get_data_yahoo(symbol, ...
+    'interval', 'd');
 expected = load('test_get_data_yahoo.mat', 'test_10');
 
 for i = 1:length(symbol)
@@ -263,8 +279,11 @@ end
 
 function test_11(testCase)
 symbol = {'COKE', 'PEP'};
-actual = get_data_yahoo(symbol, 'start', '03-10-2012', ...
-    'finish', '16-07-2014', 'format', 'dd-mm-yyyy', 'interval', 'w');
+actual = get_data_yahoo(symbol, ...
+    'start', '03-10-2012', ...
+    'finish', '16-07-2014', ...
+    'format', 'dd-mm-yyyy', ...
+    'interval', 'w');
 expected = load('test_get_data_yahoo.mat', 'test_11');
 
 for i = 1:length(symbol)
@@ -275,11 +294,14 @@ end
 end
 
 function test_12(testCase)
-symbol = {'F', 'TM'};
+symbol = {'F', 'GM'};
 start = datenum('14-10-2011', 'dd-mm-yyyy');
 finish = datenum('17-07-2014', 'dd-mm-yyyy');
-actual = get_data_yahoo(symbol, 'start', start, ...
-    'finish', finish, 'format', 'numeric', 'interval', 'm');
+actual = get_data_yahoo(symbol, ...
+    'start', start, ...
+    'finish', finish, ...
+    'format', 'numeric', ...
+    'interval', 'm');
 expected = load('test_get_data_yahoo.mat', 'test_12');
 
 for i = 1:length(symbol)
@@ -294,5 +316,5 @@ end
 % removes all of the temporary variables used by the test unit from the
 % MATLAB workspace.
 function teardownOnce(testCase)
-cd(testCase.TestData.origPath);
+cd(testCase.TestData.origPath)
 end

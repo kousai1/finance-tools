@@ -79,6 +79,15 @@ expected = 'MATLAB:expectedRow';
 verifyError(testCase, actual, expected);
 end
 
+% Because the Yahoo! Finance stock lookup service returns a result string
+% for the fictional stock symbol 'SYMBOL', its reflection is used in the
+% following test function instead.
+function test_symbol_invalid_value(testCase)
+actual = @()get_data_quandl('LOBMYS');
+expected = 'get_data_quandl:invalid_value';
+verifyError(testCase, actual, expected);
+end
+
 function test_feed_no_value(testCase)
 actual = @()get_data_quandl('SYMBOL', 'feed');
 expected = 'MATLAB:InputParser:ParamMissingValue';
@@ -175,219 +184,289 @@ end
 % the correct set of data when passed one of the various combinations of
 % input arguments that it supports.
 function test_1(testCase)
-global token;
-symbol = 'IBM';
-actual = get_data_quandl(symbol, 'token', token);
+global token
+symbol = 'FNZ.NZ';
+actual = get_data_quandl(symbol, ...
+    'feed', 'GOOG', ...
+    'token', token);
 expected = load('test_get_data_quandl.mat', 'test_1');
-verifyTrue(testCase, isequaln(actual.IBM, expected.test_1.IBM));
+verifyTrue(testCase, isequaln(actual.NZE_FNZ, expected.test_1.NZE_FNZ));
 end
 
 function test_2(testCase)
-global token;
-symbol = 'HPQ';
-actual = get_data_quandl(symbol, 'start', '27-01-2012', ...
-    'finish', '17-07-2014', 'format', 'dd-mm-yyyy', 'token', token);
+global token
+symbol = 'VEU.AX';
+actual = get_data_quandl(symbol, ...
+    'feed', 'GOOG', ...
+    'start', '27-01-2012', ...
+    'finish', '17-07-2014', ...
+    'format', 'dd-mm-yyyy', ...
+    'token', token);
 expected = load('test_get_data_quandl.mat', 'test_2');
-verifyTrue(testCase, isequaln(actual.HPQ, expected.test_2.HPQ));
+verifyTrue(testCase, isequaln(actual.ASX_VEU, expected.test_2.ASX_VEU));
 end
 
 function test_3(testCase)
-global token;
-symbol = 'WAB';
-start = datenum('07-05-2012', 'dd-mm-yyyy');
-finish = datenum('16-07-2014', 'dd-mm-yyyy');
-actual = get_data_quandl(symbol, 'start', start, 'finish', finish, ...
-    'format', 'numeric', 'token', token);
-expected = load('test_get_data_quandl.mat', 'test_3');
-verifyTrue(testCase, isequaln(actual.WAB, expected.test_3.WAB));
-end
-
-function test_4(testCase)
-global token;
-symbol = 'GE';
-actual = get_data_quandl(symbol, 'interval', 'd', 'token', token);
-expected = load('test_get_data_quandl.mat', 'test_4');
-verifyTrue(testCase, isequaln(actual.GE, expected.test_4.GE));
-end
-
-function test_5(testCase)
-global token;
-symbol = 'MSFT';
-actual = get_data_quandl(symbol, 'start', '03-10-2012', ...
-    'finish', '16-07-2014', 'format', 'dd-mm-yyyy', ...
-    'interval', 'w', 'token', token);
-expected = load('test_get_data_quandl.mat', 'test_5');
-verifyTrue(testCase, isequaln(actual.MSFT, expected.test_5.MSFT));
-end
-
-function test_6(testCase)
-global token;
-symbol = 'AAPL';
-start = datenum('14-10-2011', 'dd-mm-yyyy');
-finish = datenum('17-07-2014', 'dd-mm-yyyy');
-actual = get_data_quandl(symbol, 'start', start, 'finish', finish, ...
-    'format', 'numeric', 'interval', 'm', 'token', token);
-expected = load('test_get_data_quandl.mat', 'test_6');
-verifyTrue(testCase, isequaln(actual.AAPL, expected.test_6.AAPL));
-end
-
-function test_7(testCase)
-global token;
-symbol = {'GOOG', 'FB'};
-actual = get_data_quandl(symbol, 'token', token);
-expected = load('test_get_data_quandl.mat', 'test_7');
-verifyTrue(testCase, isequaln(actual.GOOG, expected.test_7.GOOG));
-verifyTrue(testCase, isequaln(actual.FB, expected.test_7.FB));
-end
-
-function test_8(testCase)
-global token;
-symbol = {'COKE', 'PEP'};
-actual = get_data_quandl(symbol, 'start', '27-01-2012', ...
-    'finish', '17-07-2014', 'format', 'dd-mm-yyyy', 'token', token);
-expected = load('test_get_data_quandl.mat', 'test_8');
-verifyTrue(testCase, isequaln(actual.COKE, expected.test_8.COKE));
-verifyTrue(testCase, isequaln(actual.PEP, expected.test_8.PEP));
-end
-
-function test_9(testCase)
-global token;
-symbol = {'F', 'GM'};
-start = datenum('07-05-2012', 'dd-mm-yyyy');
-finish = datenum('16-07-2014', 'dd-mm-yyyy');
-actual = get_data_quandl(symbol, 'start', start, 'finish', finish, ...
-    'format', 'numeric', 'token', token);
-expected = load('test_get_data_quandl.mat', 'test_9');
-verifyTrue(testCase, isequaln(actual.F, expected.test_9.F));
-verifyTrue(testCase, isequaln(actual.GM, expected.test_9.GM));
-end
-
-function test_10(testCase)
-global token;
-symbol = {'MCD', 'BKW'};
-actual = get_data_quandl(symbol, 'interval', 'd', 'token', token);
-expected = load('test_get_data_quandl.mat', 'test_10');
-verifyTrue(testCase, isequaln(actual.MCD, expected.test_10.MCD));
-verifyTrue(testCase, isequaln(actual.BKW, expected.test_10.BKW));
-end
-
-function test_11(testCase)
-global token;
-symbol = {'AMZN', 'NFLX'};
-actual = get_data_quandl(symbol, 'start', '03-10-2012', ...
-    'finish', '16-07-2014', 'format', 'dd-mm-yyyy', ...
-    'interval', 'w', 'token', token);
-expected = load('test_get_data_quandl.mat', 'test_11');
-verifyTrue(testCase, isequaln(actual.AMZN, expected.test_11.AMZN));
-verifyTrue(testCase, isequaln(actual.NFLX, expected.test_11.NFLX));
-end
-
-function test_12(testCase)
-global token;
-symbol = {'GS', 'MS'};
-start = datenum('14-10-2011', 'dd-mm-yyyy');
-finish = datenum('17-07-2014', 'dd-mm-yyyy');
-actual = get_data_quandl(symbol, 'start', start, 'finish', finish, ...
-    'format', 'numeric', 'interval', 'm', 'token', token);
-expected = load('test_get_data_quandl.mat', 'test_12');
-verifyTrue(testCase, isequaln(actual.GS, expected.test_12.GS));
-verifyTrue(testCase, isequaln(actual.MS, expected.test_12.MS));
-end
-
-function test_13(testCase)
-global token;
-symbol = 'FNZ.NZ';
-actual = get_data_quandl(symbol, 'feed', 'GOOG', 'token', token);
-expected = load('test_get_data_quandl.mat', 'test_13');
-verifyTrue(testCase, isequaln(actual.NZE_FNZ, expected.test_13.NZE_FNZ));
-end
-
-function test_14(testCase)
-global token;
-symbol = 'VEU.AX';
-actual = get_data_quandl(symbol, 'feed', 'GOOG', ...
-    'start', '27-01-2012', 'finish', '17-07-2014', ...
-    'format', 'dd-mm-yyyy', 'token', token);
-expected = load('test_get_data_quandl.mat', 'test_14');
-verifyTrue(testCase, isequaln(actual.ASX_VEU, expected.test_14.ASX_VEU));
-end
-
-function test_15(testCase)
-global token;
+global token
 symbol = 'VAP.AX';
 start = datenum('07-05-2012', 'dd-mm-yyyy');
 finish = datenum('16-07-2014', 'dd-mm-yyyy');
-actual = get_data_quandl(symbol, 'feed', 'GOOG', 'start', start, ...
-    'finish', finish, 'format', 'numeric', 'token', token);
-expected = load('test_get_data_quandl.mat', 'test_15');
-verifyTrue(testCase, isequaln(actual.ASX_VAP, expected.test_15.ASX_VAP));
+actual = get_data_quandl(symbol, ...
+    'feed', 'GOOG', ...
+    'start', start, ...
+    'finish', finish, ...
+    'format', 'numeric', ...
+    'token', token);
+expected = load('test_get_data_quandl.mat', 'test_3');
+verifyTrue(testCase, isequaln(actual.ASX_VAP, expected.test_3.ASX_VAP));
 end
 
-function test_16(testCase)
+function test_4(testCase)
+global token
 symbol = 'VAS.AX';
-actual = get_data_quandl(symbol, 'feed', 'GOOG', 'interval', 'd');
-expected = load('test_get_data_quandl.mat', 'test_16');
-verifyTrue(testCase, isequaln(actual.ASX_VAS, expected.test_16.ASX_VAS));
+actual = get_data_quandl(symbol, ...
+    'feed', 'GOOG', ...
+    'interval', 'd', ...
+    'token', token);
+expected = load('test_get_data_quandl.mat', 'test_4');
+verifyTrue(testCase, isequaln(actual.ASX_VAS, expected.test_4.ASX_VAS));
 end
 
-function test_17(testCase)
-global token;
+function test_5(testCase)
+global token
 symbol = 'VGB.AX';
-actual = get_data_quandl(symbol, 'feed', 'GOOG', ...
-    'start', '03-10-2012', 'finish', '16-07-2014', ...
-    'format', 'dd-mm-yyyy', 'interval', 'w', 'token', token);
-expected = load('test_get_data_quandl.mat', 'test_17');
-verifyTrue(testCase, isequaln(actual.ASX_VGB, expected.test_17.ASX_VGB));
+actual = get_data_quandl(symbol, ...
+    'feed', 'GOOG', ...
+    'start', '03-10-2012', ...
+    'finish', '16-07-2014', ...
+    'format', 'dd-mm-yyyy', ...
+    'interval', 'w', ...
+    'token', token);
+expected = load('test_get_data_quandl.mat', 'test_5');
+verifyTrue(testCase, isequaln(actual.ASX_VGB, expected.test_5.ASX_VGB));
 end
 
-function test_18(testCase)
-global token;
+function test_6(testCase)
+global token
 symbol = 'VTS.AX';
 start = datenum('14-10-2011', 'dd-mm-yyyy');
 finish = datenum('17-07-2014', 'dd-mm-yyyy');
-actual = get_data_quandl(symbol, 'feed', 'GOOG', 'start', start, ...
-    'finish', finish, 'format', 'numeric', 'interval', 'm', ...
+actual = get_data_quandl(symbol, ...
+    'feed', 'GOOG', ...
+    'start', start, ...
+    'finish', finish, ...
+    'format', 'numeric', ...
+    'interval', 'm', ...
+    'token', token);
+expected = load('test_get_data_quandl.mat', 'test_6');
+verifyTrue(testCase, isequaln(actual.ASX_VTS, expected.test_6.ASX_VTS));
+end
+
+function test_7(testCase)
+global token
+symbol = 'IBM';
+actual = get_data_quandl(symbol, ...
+    'feed', 'WIKI', ...
+    'token', token);
+expected = load('test_get_data_quandl.mat', 'test_7');
+verifyTrue(testCase, isequaln(actual.IBM, expected.test_7.IBM));
+end
+
+function test_8(testCase)
+global token
+symbol = 'HPQ';
+actual = get_data_quandl(symbol, ...
+    'feed', 'WIKI', ...
+    'start', '27-01-2012', ...
+    'finish', '17-07-2014', ...
+    'format', 'dd-mm-yyyy', ...
+    'token', token);
+expected = load('test_get_data_quandl.mat', 'test_8');
+verifyTrue(testCase, isequaln(actual.HPQ, expected.test_8.HPQ));
+end
+
+function test_9(testCase)
+global token
+symbol = 'WAB';
+start = datenum('07-05-2012', 'dd-mm-yyyy');
+finish = datenum('16-07-2014', 'dd-mm-yyyy');
+actual = get_data_quandl(symbol, ...
+    'feed', 'WIKI', ...
+    'start', start, ...
+    'finish', finish, ...
+    'format', 'numeric', ...
+    'token', token);
+expected = load('test_get_data_quandl.mat', 'test_9');
+verifyTrue(testCase, isequaln(actual.WAB, expected.test_9.WAB));
+end
+
+function test_10(testCase)
+global token
+symbol = 'GE';
+actual = get_data_quandl(symbol, ...
+    'feed', 'WIKI', ...
+    'interval', 'd', ...
+    'token', token);
+expected = load('test_get_data_quandl.mat', 'test_10');
+verifyTrue(testCase, isequaln(actual.GE, expected.test_10.GE));
+end
+
+function test_11(testCase)
+global token
+symbol = 'MSFT';
+actual = get_data_quandl(symbol, ...
+    'feed', 'WIKI', ...
+    'start', '03-10-2012', ...
+    'finish', '16-07-2014', ...
+    'format', 'dd-mm-yyyy', ...
+    'interval', 'w', ...
+    'token', token);
+expected = load('test_get_data_quandl.mat', 'test_11');
+verifyTrue(testCase, isequaln(actual.MSFT, expected.test_11.MSFT));
+end
+
+function test_12(testCase)
+global token
+symbol = 'AAPL';
+start = datenum('14-10-2011', 'dd-mm-yyyy');
+finish = datenum('17-07-2014', 'dd-mm-yyyy');
+actual = get_data_quandl(symbol, ...
+    'feed', 'WIKI', ...
+    'start', start, ...
+    'finish', finish, ...
+    'format', 'numeric', ...
+    'interval', 'm', ...
+    'token', token);
+expected = load('test_get_data_quandl.mat', 'test_12');
+verifyTrue(testCase, isequaln(actual.AAPL, expected.test_12.AAPL));
+end
+
+function test_13(testCase)
+global token
+symbol = 'IBM';
+actual = get_data_quandl(symbol, ...
+    'feed', 'YAHOO', ...
+    'token', token);
+expected = load('test_get_data_quandl.mat', 'test_13');
+verifyTrue(testCase, isequaln(actual.IBM, expected.test_13.IBM));
+end
+
+function test_14(testCase)
+global token
+symbol = 'HPQ';
+actual = get_data_quandl(symbol, ...
+    'feed', 'YAHOO', ...
+    'start', '27-01-2012', ...
+    'finish', '17-07-2014', ...
+    'format', 'dd-mm-yyyy', ...
+    'token', token);
+expected = load('test_get_data_quandl.mat', 'test_14');
+verifyTrue(testCase, isequaln(actual.HPQ, expected.test_14.HPQ));
+end
+
+function test_15(testCase)
+global token
+symbol = 'WAB';
+start = datenum('07-05-2012', 'dd-mm-yyyy');
+finish = datenum('16-07-2014', 'dd-mm-yyyy');
+actual = get_data_quandl(symbol, ...
+    'feed', 'YAHOO', ...
+    'start', start, ...
+    'finish', finish, ...
+    'format', 'numeric', ...
+    'token', token);
+expected = load('test_get_data_quandl.mat', 'test_15');
+verifyTrue(testCase, isequaln(actual.WAB, expected.test_15.WAB));
+end
+
+function test_16(testCase)
+global token
+symbol = 'GE';
+actual = get_data_quandl(symbol, ...
+    'feed', 'YAHOO', ...
+    'interval', 'd', ...
+    'token', token);
+expected = load('test_get_data_quandl.mat', 'test_16');
+verifyTrue(testCase, isequaln(actual.GE, expected.test_16.GE));
+end
+
+function test_17(testCase)
+global token
+symbol = 'MSFT';
+actual = get_data_quandl(symbol, ...
+    'feed', 'YAHOO', ...
+    'start', '03-10-2012', ...
+    'finish', '16-07-2014', ...
+    'format', 'dd-mm-yyyy', ...
+    'interval', 'w', ...
+    'token', token);
+expected = load('test_get_data_quandl.mat', 'test_17');
+verifyTrue(testCase, isequaln(actual.MSFT, expected.test_17.MSFT));
+end
+
+function test_18(testCase)
+global token
+symbol = 'AAPL';
+start = datenum('14-10-2011', 'dd-mm-yyyy');
+finish = datenum('17-07-2014', 'dd-mm-yyyy');
+actual = get_data_quandl(symbol, ...
+    'feed', 'YAHOO', ...
+    'start', start, ...
+    'finish', finish, ...
+    'format', 'numeric', ...
+    'interval', 'm', ...
     'token', token);
 expected = load('test_get_data_quandl.mat', 'test_18');
-verifyTrue(testCase, isequaln(actual.ASX_VTS, expected.test_18.ASX_VTS));
+verifyTrue(testCase, isequaln(actual.AAPL, expected.test_18.AAPL));
 end
 
 function test_19(testCase)
-global token;
+global token
 symbol = {'IBM', 'HPQ'};
-actual = get_data_quandl(symbol, 'feed', 'GOOG', 'token', token);
+actual = get_data_quandl(symbol, ...
+    'feed', 'GOOG', ...
+    'token', token);
 expected = load('test_get_data_quandl.mat', 'test_19');
 verifyTrue(testCase, isequaln(actual.NYSE_IBM, expected.test_19.NYSE_IBM));
 verifyTrue(testCase, isequaln(actual.NYSE_HPQ, expected.test_19.NYSE_HPQ));
 end
 
 function test_20(testCase)
-global token;
+global token
 symbol = {'WAB', 'GE'};
-actual = get_data_quandl(symbol, 'feed', 'GOOG', ...
-    'start', '27-01-2012', 'finish', '17-07-2014', ...
-    'format', 'dd-mm-yyyy', 'token', token);
+actual = get_data_quandl(symbol, ...
+    'feed', 'GOOG', ...
+    'start', '27-01-2012', ...
+    'finish', '17-07-2014', ...
+    'format', 'dd-mm-yyyy', ...
+    'token', token);
 expected = load('test_get_data_quandl.mat', 'test_20');
 verifyTrue(testCase, isequaln(actual.NYSE_WAB, expected.test_20.NYSE_WAB));
 verifyTrue(testCase, isequaln(actual.NYSE_GE, expected.test_20.NYSE_GE));
 end
 
 function test_21(testCase)
-global token;
+global token
 symbol = {'MSFT', 'AAPL'};
 start = datenum('07-05-2012', 'dd-mm-yyyy');
 finish = datenum('16-07-2014', 'dd-mm-yyyy');
-actual = get_data_quandl(symbol, 'feed', 'GOOG', 'start', start, ...
-    'finish', finish, 'format', 'numeric', 'token', token);
+actual = get_data_quandl(symbol, ...
+    'feed', 'GOOG', ...
+    'start', start, ...
+    'finish', finish, ...
+    'format', 'numeric', ...
+    'token', token);
 expected = load('test_get_data_quandl.mat', 'test_21');
 verifyTrue(testCase, isequaln(actual.NASDAQ_MSFT, expected.test_21.NASDAQ_MSFT));
 verifyTrue(testCase, isequaln(actual.NASDAQ_AAPL, expected.test_21.NASDAQ_AAPL));
 end
 
 function test_22(testCase)
-global token;
+global token
 symbol = {'GOOG', 'FB'};
-actual = get_data_quandl(symbol, 'feed', 'GOOG', 'interval', 'd', ...
+actual = get_data_quandl(symbol, ...
+    'feed', 'GOOG', ...
+    'interval', 'd', ...
     'token', token);
 expected = load('test_get_data_quandl.mat', 'test_22');
 verifyTrue(testCase, isequaln(actual.NASDAQ_GOOG, expected.test_22.NASDAQ_GOOG));
@@ -395,23 +474,31 @@ verifyTrue(testCase, isequaln(actual.NASDAQ_FB, expected.test_22.NASDAQ_FB));
 end
 
 function test_23(testCase)
-global token;
+global token
 symbol = {'COKE', 'PEP'};
-actual = get_data_quandl(symbol, 'feed', 'GOOG', ...
-    'start', '03-10-2012', 'finish', '16-07-2014', ...
-    'format', 'dd-mm-yyyy', 'interval', 'w', 'token', token);
+actual = get_data_quandl(symbol, ...
+    'feed', 'GOOG', ...
+    'start', '03-10-2012', ...
+    'finish', '16-07-2014', ...
+    'format', 'dd-mm-yyyy', ...
+    'interval', 'w', ...
+    'token', token);
 expected = load('test_get_data_quandl.mat', 'test_23');
 verifyTrue(testCase, isequaln(actual.NASDAQ_COKE, expected.test_23.NASDAQ_COKE));
 verifyTrue(testCase, isequaln(actual.NYSE_PEP, expected.test_23.NYSE_PEP));
 end
 
 function test_24(testCase)
-global token;
+global token
 symbol = {'F', 'GM'};
 start = datenum('14-10-2011', 'dd-mm-yyyy');
 finish = datenum('17-07-2014', 'dd-mm-yyyy');
-actual = get_data_quandl(symbol, 'feed', 'GOOG', 'start', start, ...
-    'finish', finish, 'format', 'numeric', 'interval', 'm', ...
+actual = get_data_quandl(symbol, ...
+    'feed', 'GOOG', ...
+    'start', start, ...
+    'finish', finish, ...
+    'format', 'numeric', ...
+    'interval', 'm', ...
     'token', token);
 expected = load('test_get_data_quandl.mat', 'test_24');
 verifyTrue(testCase, isequaln(actual.NYSE_F, expected.test_24.NYSE_F));
@@ -419,101 +506,131 @@ verifyTrue(testCase, isequaln(actual.NYSE_GM, expected.test_24.NYSE_GM));
 end
 
 function test_25(testCase)
-global token;
-symbol = 'IBM';
-actual = get_data_quandl(symbol, 'feed', 'YAHOO', 'token', token);
+global token
+symbol = {'GOOG', 'FB'};
+actual = get_data_quandl(symbol, ...
+    'token', token);
 expected = load('test_get_data_quandl.mat', 'test_25');
-verifyTrue(testCase, isequaln(actual.IBM, expected.test_25.IBM));
+verifyTrue(testCase, isequaln(actual.GOOG, expected.test_25.GOOG));
+verifyTrue(testCase, isequaln(actual.FB, expected.test_25.FB));
 end
 
 function test_26(testCase)
-global token;
-symbol = 'HPQ';
-actual = get_data_quandl(symbol, 'feed', 'YAHOO', ...
-    'start', '27-01-2012', 'finish', '17-07-2014', ...
-    'format', 'dd-mm-yyyy', 'token', token);
+global token
+symbol = {'COKE', 'PEP'};
+actual = get_data_quandl(symbol, ...
+    'start', '27-01-2012', ...
+    'finish', '17-07-2014', ...
+    'format', 'dd-mm-yyyy', ...
+    'token', token);
 expected = load('test_get_data_quandl.mat', 'test_26');
-verifyTrue(testCase, isequaln(actual.HPQ, expected.test_26.HPQ));
+verifyTrue(testCase, isequaln(actual.COKE, expected.test_26.COKE));
+verifyTrue(testCase, isequaln(actual.PEP, expected.test_26.PEP));
 end
 
 function test_27(testCase)
-global token;
-symbol = 'WAB';
+global token
+symbol = {'F', 'GM'};
 start = datenum('07-05-2012', 'dd-mm-yyyy');
 finish = datenum('16-07-2014', 'dd-mm-yyyy');
-actual = get_data_quandl(symbol, 'feed', 'YAHOO', 'start', start, ...
-    'finish', finish, 'format', 'numeric', 'token', token);
+actual = get_data_quandl(symbol, ...
+    'start', start, ...
+    'finish', finish, ...
+    'format', 'numeric', ...
+    'token', token);
 expected = load('test_get_data_quandl.mat', 'test_27');
-verifyTrue(testCase, isequaln(actual.WAB, expected.test_27.WAB));
+verifyTrue(testCase, isequaln(actual.F, expected.test_27.F));
+verifyTrue(testCase, isequaln(actual.GM, expected.test_27.GM));
 end
 
 function test_28(testCase)
-global token;
-symbol = 'GE';
-actual = get_data_quandl(symbol, 'feed', 'YAHOO', 'interval', 'd', ...
+global token
+symbol = {'MCD', 'BKW'};
+actual = get_data_quandl(symbol, ...
+    'interval', 'd', ...
     'token', token);
 expected = load('test_get_data_quandl.mat', 'test_28');
-verifyTrue(testCase, isequaln(actual.GE, expected.test_28.GE));
+verifyTrue(testCase, isequaln(actual.MCD, expected.test_28.MCD));
+verifyTrue(testCase, isequaln(actual.BKW, expected.test_28.BKW));
 end
 
 function test_29(testCase)
-global token;
-symbol = 'MSFT';
-actual = get_data_quandl(symbol, 'feed', 'YAHOO', ...
-    'start', '03-10-2012', 'finish', '16-07-2014', ...
-    'format', 'dd-mm-yyyy', 'interval', 'w', 'token', token);
+global token
+symbol = {'AMZN', 'NFLX'};
+actual = get_data_quandl(symbol, ...
+    'start', '03-10-2012', ...
+    'finish', '16-07-2014', ...
+    'format', 'dd-mm-yyyy', ...
+    'interval', 'w', ...
+    'token', token);
 expected = load('test_get_data_quandl.mat', 'test_29');
-verifyTrue(testCase, isequaln(actual.MSFT, expected.test_29.MSFT));
+verifyTrue(testCase, isequaln(actual.AMZN, expected.test_29.AMZN));
+verifyTrue(testCase, isequaln(actual.NFLX, expected.test_29.NFLX));
 end
 
 function test_30(testCase)
-global token;
-symbol = 'AAPL';
+global token
+symbol = {'GS', 'MS'};
 start = datenum('14-10-2011', 'dd-mm-yyyy');
 finish = datenum('17-07-2014', 'dd-mm-yyyy');
-actual = get_data_quandl(symbol, 'feed', 'YAHOO', 'start', start, ...
-    'finish', finish, 'format', 'numeric', 'interval', 'm', ...
+actual = get_data_quandl(symbol, ...
+    'start', start, ...
+    'finish', finish, ...
+    'format', 'numeric', ...
+    'interval', 'm', ...
     'token', token);
 expected = load('test_get_data_quandl.mat', 'test_30');
-verifyTrue(testCase, isequaln(actual.AAPL, expected.test_30.AAPL));
+verifyTrue(testCase, isequaln(actual.GS, expected.test_30.GS));
+verifyTrue(testCase, isequaln(actual.MS, expected.test_30.MS));
 end
 
 function test_31(testCase)
-global token;
+global token
 symbol = {'GOOG', 'FB'};
-actual = get_data_quandl(symbol, 'feed', 'YAHOO', 'token', token);
+actual = get_data_quandl(symbol, ...
+    'feed', 'YAHOO', ...
+    'token', token);
 expected = load('test_get_data_quandl.mat', 'test_31');
 verifyTrue(testCase, isequaln(actual.GOOG, expected.test_31.GOOG));
 verifyTrue(testCase, isequaln(actual.FB, expected.test_31.FB));
 end
 
 function test_32(testCase)
-global token;
+global token
 symbol = {'COKE', 'PEP'};
-actual = get_data_quandl(symbol, 'feed', 'YAHOO', ...
-    'start', '27-01-2012', 'finish', '17-07-2014', ...
-    'format', 'dd-mm-yyyy', 'token', token);
+actual = get_data_quandl(symbol, ...
+    'feed', 'YAHOO', ...
+    'start', '27-01-2012', ...
+    'finish', '17-07-2014', ...
+    'format', 'dd-mm-yyyy', ...
+    'token', token);
 expected = load('test_get_data_quandl.mat', 'test_32');
 verifyTrue(testCase, isequaln(actual.COKE, expected.test_32.COKE));
 verifyTrue(testCase, isequaln(actual.PEP, expected.test_32.PEP));
 end
 
 function test_33(testCase)
-global token;
+global token
 symbol = {'F', 'GM'};
 start = datenum('07-05-2012', 'dd-mm-yyyy');
 finish = datenum('16-07-2014', 'dd-mm-yyyy');
-actual = get_data_quandl(symbol, 'feed', 'YAHOO', 'start', start, ...
-    'finish', finish, 'format', 'numeric', 'token', token);
+actual = get_data_quandl(symbol, ...
+    'feed', 'YAHOO', ...
+    'start', start, ...
+    'finish', finish, ...
+    'format', 'numeric', ...
+    'token', token);
 expected = load('test_get_data_quandl.mat', 'test_33');
 verifyTrue(testCase, isequaln(actual.F, expected.test_33.F));
 verifyTrue(testCase, isequaln(actual.GM, expected.test_33.GM));
 end
 
 function test_34(testCase)
-global token;
+global token
 symbol = {'MCD', 'BKW'};
-actual = get_data_quandl(symbol, 'feed', 'YAHOO', 'interval', 'd', ...
+actual = get_data_quandl(symbol, ...
+    'feed', 'YAHOO', ...
+    'interval', 'd', ...
     'token', token);
 expected = load('test_get_data_quandl.mat', 'test_34');
 verifyTrue(testCase, isequaln(actual.MCD, expected.test_34.MCD));
@@ -521,27 +638,44 @@ verifyTrue(testCase, isequaln(actual.BKW, expected.test_34.BKW));
 end
 
 function test_35(testCase)
-global token;
+global token
 symbol = {'AMZN', 'NFLX'};
-actual = get_data_quandl(symbol, 'feed', 'YAHOO', ...
-    'start', '03-10-2012', 'finish', '16-07-2014', ...
-    'format', 'dd-mm-yyyy', 'interval', 'w', 'token', token);
+actual = get_data_quandl(symbol, ...
+    'feed', 'YAHOO', ...
+    'start', '03-10-2012', ...
+    'finish', '16-07-2014', ...
+    'format', 'dd-mm-yyyy', ...
+    'interval', 'w', ...
+    'token', token);
 expected = load('test_get_data_quandl.mat', 'test_35');
 verifyTrue(testCase, isequaln(actual.AMZN, expected.test_35.AMZN));
 verifyTrue(testCase, isequaln(actual.NFLX, expected.test_35.NFLX));
 end
 
 function test_36(testCase)
-global token;
+global token
 symbol = {'GS', 'MS'};
 start = datenum('14-10-2011', 'dd-mm-yyyy');
 finish = datenum('17-07-2014', 'dd-mm-yyyy');
-actual = get_data_quandl(symbol, 'feed', 'YAHOO', ...
-    'start', start, 'finish', finish, 'format', 'numeric', ...
-    'interval', 'm', 'token', token);
+actual = get_data_quandl(symbol, ...
+    'feed', 'YAHOO', ...
+    'start', start, ...
+    'finish', finish, ...
+    'format', 'numeric', ...
+    'interval', 'm', ...
+    'token', token);
 expected = load('test_get_data_quandl.mat', 'test_36');
 verifyTrue(testCase, isequaln(actual.GS, expected.test_36.GS));
 verifyTrue(testCase, isequaln(actual.MS, expected.test_36.MS));
+end
+
+function test_37(testCase)
+global token
+symbol = 'BMW.BE';
+actual = get_data_quandl(symbol, ...
+    'token', token);
+expected = load('test_get_data_quandl.mat', 'test_37');
+verifyTrue(testCase, isequaln(actual, expected.test_37));
 end
 
 %%
@@ -549,5 +683,5 @@ end
 % removes all of the temporary variables used by the test unit from the
 % MATLAB workspace.
 function teardownOnce(testCase)
-cd(testCase.TestData.origPath);
+cd(testCase.TestData.origPath)
 end

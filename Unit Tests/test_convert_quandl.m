@@ -89,5 +89,5 @@ end
 % removes all of the temporary variables used by the test unit from the
 % MATLAB workspace.
 function teardownOnce(testCase)
-cd(testCase.TestData.origPath);
+cd(testCase.TestData.origPath)
 end

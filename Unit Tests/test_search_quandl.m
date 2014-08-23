@@ -155,14 +155,16 @@ end
 % input arguments that it supports.
 function test_1(testCase)
 global token;
-actual = search_quandl('mUsNrbU&@I{W"UcsA"P', 'token', token);
+actual = search_quandl('mUsNrbU&@I{W"UcsA"P', ...
+    'token', token);
 expected = load('test_search_quandl.mat', 'test_1');
 verifyEqual(testCase, actual, expected.test_1);
 end
 
 function test_2(testCase)
 global token;
-actual = search_quandl('FNZ', 'token', token);
+actual = search_quandl('FNZ', ...
+    'token', token);
 expected = load('test_search_quandl.mat', 'test_2');
 
 for i = 1:length(actual)
@@ -172,7 +174,9 @@ end
 
 function test_3(testCase)
 global token;
-actual = search_quandl('IBM', 'count', 25, 'token', token);
+actual = search_quandl('IBM', ...
+    'count', 25, ...
+    'token', token);
 expected = load('test_search_quandl.mat', 'test_3');
 
 for i = 1:length(actual)
@@ -182,7 +186,9 @@ end
 
 function test_4(testCase)
 global token;
-actual = search_quandl('VEU', 'filter', 'GOOG', 'token', token);
+actual = search_quandl('VEU', ...
+    'filter', 'GOOG', ...
+    'token', token);
 expected = load('test_search_quandl.mat', 'test_4');
 
 for i = 1:length(actual)
@@ -192,7 +198,9 @@ end
 
 function test_5(testCase)
 global token;
-actual = search_quandl('HPQ', 'count', 25, 'filter', 'GOOG', ...
+actual = search_quandl('HPQ', ...
+    'count', 25, ...
+    'filter', 'GOOG', ...
     'token', token);
 expected = load('test_search_quandl.mat', 'test_5');
 
@@ -206,5 +214,5 @@ end
 % removes all of the temporary variables used by the test unit from the
 % MATLAB workspace.
 function teardownOnce(testCase)
-cd(testCase.TestData.origPath);
+cd(testCase.TestData.origPath)
 end

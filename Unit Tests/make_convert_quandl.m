@@ -31,18 +31,20 @@
 % This script produces the set of data that TEST_CONVERT_QUANDL uses as its
 % reference.
 current_path = pwd;
+
+document_1 = xmlread('test_1_convert_quandl.xml');
+document_2 = xmlread('test_2_convert_quandl.xml');
+
 cd ../
 
-document = xmlread('test_1_convert_quandl.xml');
-test_1 = convert_quandl(document);
-disp('Created test_1 dataset.');
-pause(1);
+test_1 = convert_quandl(document_1);
+disp('Created test_1 dataset.')
+pause(1)
 
-document = xmlread('test_2_convert_quandl.xml');
-test_2 = convert_quandl(document);
-disp('Created test_2 dataset.');
-pause(1);
+test_2 = convert_quandl(document_2);
+disp('Created test_2 dataset.')
+pause(1)
 
-cd(current_path);
-save('test_convert_quandl', 'test_1', 'test_2');
-clearvars -except token;
+cd(current_path)
+save('test_convert_quandl', 'test_1', 'test_2')
+clearvars -except token
