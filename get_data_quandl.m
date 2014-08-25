@@ -286,13 +286,43 @@ end
 %% Process input.
 % At this point, all stock symbols comply with the Yahoo! Finance naming
 % convention. If the user has selected Yahoo! Finance as the data feed,
-% then no further checks of the stock symbols are required. If the user has
-% selected a different data feed however, then the stock symbols will need 
-% to undergo further checks.
+% then the final check that needs to be made is to ensure that the stock
+% symbol exists within Quandl's Yahoo! Finance data feed. Because Quandl
+% does not use a consistent naming convention for these stock symbols,
+% this may require user input.
 good_symbol = {};
 
 if strcmp(feed, 'YAHOO')
-    good_symbol = symbol;
+    for i = 1:length(symbol)
+        split = regexp(symbol{i}, '\.', 'split');
+
+        if length(split) == 1
+            % US stock symbol.
+            good_symbol = [good_symbol, symbol{i}];
+        else
+            % Foreign stock symbol.
+            results = search_quandl(split{1}, 'token', token);
+            expression = ['(' split{2} '_|_' split{2} ')'];
+
+            for j = 1:length(results)
+                match = regexp(results(j).code, expression, 'once', ...
+                    'match');
+
+                if ~isempty(match)
+                    good_symbol = [good_symbol, results(j).code];
+                    break
+                end
+            end
+
+            if isempty(match)
+                result = symbol_prompt(split);
+
+                if ~isempty(result)
+                    good_symbol = [good_symbol, result];
+                end
+            end
+        end
+    end
 end
 
 %%
@@ -535,4 +565,19 @@ end
 
 function check_token(token)
 validateattributes(token, {'char'}, {'row'});
+end
+
+function result = symbol_prompt(split)
+command = sprintf('start www.quandl.com/YAHOO?keyword=%s', split{1});
+system(command);
+
+symbol = [split{1} '.' split{2}];
+prompt = sprintf(['\nUnable to resolve symbol:\r\n''%s''\r\n'...
+    'Please find the correct symbol in the browser\n'...
+    'page that has just opened - look for the text\n'...
+    'beginning ''YAHOO/''. Enter the symbol below\n'...
+    'in single quotes and press enter. If the symbol\n'...
+    'does not exist, press enter.\r\n>> '], symbol);
+
+result = input(prompt);
 end
