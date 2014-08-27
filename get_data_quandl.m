@@ -266,7 +266,7 @@ terminal_field = '&callback=YAHOO.Finance.SymbolSuggest.ssCallback';
 
 for i = 1:length(symbol)
     symbol_field = symbol{i};
-
+    
     try
         json_string = urlread([symbol_url symbol_field terminal_field], ...
             'Timeout', 10);
@@ -275,7 +275,7 @@ for i = 1:length(symbol)
             ['No connection. Failed to get JSON data for symbol:' ...
             '\r\n''%s''\r\nCheck the network connection.'], symbol{i});
     end
-
+    
     if ~isempty(strfind(json_string, '"Result":[]'))
         error('get_data_quandl:invalid_value', ...
             ['Invalid value. The stock symbol:\r\n''%s''\r\n does ' ...
@@ -283,128 +283,9 @@ for i = 1:length(symbol)
     end
 end
 
-%% Process input.
-% At this point, all stock symbols comply with the Yahoo! Finance naming
-% convention. If the user has selected Yahoo! Finance as the data feed,
-% then the final check that needs to be made is to ensure that the stock
-% symbol exists within Quandl's Yahoo! Finance data feed. Because Quandl
-% does not use a consistent naming convention for these stock symbols,
-% this may require user input.
-good_symbol = {};
-
-if strcmp(feed, 'YAHOO')
-    for i = 1:length(symbol)
-        split = regexp(symbol{i}, '\.', 'split');
-
-        if length(split) == 1
-            % US stock symbol.
-            good_symbol = [good_symbol, symbol{i}];
-        else
-            % Foreign stock symbol.
-            results = search_quandl(split{1}, 'token', token);
-            expression = ['(' split{2} '_|_' split{2} ')'];
-
-            for j = 1:length(results)
-                match = regexp(results(j).code, expression, 'once', ...
-                    'match');
-
-                if ~isempty(match)
-                    good_symbol = [good_symbol, results(j).code];
-                    break
-                end
-            end
-
-            if isempty(match)
-                result = symbol_prompt(split);
-
-                if ~isempty(result)
-                    good_symbol = [good_symbol, result];
-                end
-            end
-        end
-    end
-end
-
-%%
-% In the case of the Quandl open data feed, this involves checking that
-% none of the symbols has an exchange suffix. This is because the Quandl
-% open data feed supports the AMEX, NASDAQ, and NYSE exchanges only, and
-% Yahoo! Finance does not assign US stocks an exchange suffix.
-if isempty(feed) || strcmp(feed, 'WIKI')
-    for i = 1:length(symbol)
-        if ~isempty(strfind(symbol{i}, '.'))
-            warning('get_data_quandl:invalid_value', ...
-                ['Invalid value. The stock symbol:\r\n''%s''\r\n' ...
-                'contains an unsupported exchange code.'], symbol{i});
-        else
-            good_symbol = [good_symbol, symbol{i}];
-        end
-    end
-end
-
-%%
-% In the case of the Google Finance data feed, it is necessary to convert
-% symbols from the Yahoo! Finance naming convention to the Google Finance
-% naming convention. For foreign stocks, this involves replacing the Yahoo!
-% Finance exchange suffix with the corresponding Google Finance exchange
-% prefix. For US stocks, the situation is more complex. Because Yahoo!
-% Finance does not assign US stocks an exchange suffix, it is not possible
-% to determine the correct Google Finance exchange prefix without further
-% information. The simplest way to obtain the necessary information is to
-% send the stock symbol in a query to Google Finance, and parse the result.
-finance_url = 'https://www.google.com/finance?q=';
-
-if strcmp(feed, 'GOOG')
-    for i = 1:length(symbol)
-        split = regexp(symbol{i}, '\.', 'split');
-
-        if length(split) == 1
-            % US stock symbol.
-            try
-                html_string = urlread([finance_url symbol{i}], ...
-                    'Timeout', 10);
-            catch
-                error('get_data_quandl:no_connection', ...
-                    ['No connection. Failed to get HTML data for ' ...
-                    'symbol:\r\n''%s''\r\nCheck the network ' ...
-                    'connection.'], symbol{i});
-            end
-
-            expression = ['(\w*:' symbol{i} ')'];
-
-            match = regexp(html_string, expression, 'once', 'match');
-
-            if isempty(match)
-                warning('get_data_quandl:invalid_value', ...
-                    ['Invalid value. The stock symbol:' ...
-                    '\r\n''%s''\r\n does not exist.'], symbol{i});
-            else
-                match = regexprep(match, ':', '_');
-                good_symbol = [good_symbol, match];
-            end
-
-        else
-            % Foreign stock symbol.
-            row = strcmp(EXCHANGE_CODES(:, 1), split{2});
-            prefix = EXCHANGE_CODES(row, 2);
-
-            if ~isempty(prefix{1})
-                this_symbol = [prefix{1} '_' char(split{1})];
-                good_symbol = [good_symbol, this_symbol];
-            else
-                warning('get_data_quandl:invalid_value', ...
-                    ['Invalid value. The exchange:\r\n%s\r\nis not ' ...
-                    'supported by Google Finance.'], ...
-                    char(EXCHANGE_CODES(row, 3)));
-            end
-        end
-    end
-end
-
 %% Prepare REST requests.
-% A single REST request is made to Quandl for each stock symbol, Each
-% request consists of a base URL, and a number of optional query
-% parameters.
+% A single REST request will be made to Quandl for each stock symbol. Each
+% request consists of a base URL, and a number of optional parameters.
 price_url = 'http://www.quandl.com/api/v1/datasets/';
 
 if ~isempty(feed)
@@ -446,20 +327,194 @@ else
     interval_field = '&collapse=daily';
 end
 
+%% Process symbols.
+% At this point, all stock symbols comply with the Yahoo! Finance naming
+% convention. The next step is to process the symbols so that they comply
+% with the naming convention of the chosen Quandl data feed. This can be
+% quite a challenge, given that certain data feeds do not in fact use a
+% consistent naming convention. Furthermore, complying with the naming
+% convention of the chosen data feed does not guarantee that Quandl has
+% historic stock data available for that particular symbol. As a result,
+% the existence of each and every symbol must be checked before historic
+% stock data is retrieved. In the case of the Google Finance data feed,
+% Quandl's naming convention is very similar to that of Google Finance
+% itself. All stock symbols are given an exchange code prefix, including
+% both foreign and US stocks. Because Yahoo! Finance does not assign US
+% stocks an exchange code, it is not possible to determine the correct
+% Google Finance exchange code prefix without further information. The
+% simplest way to obtain the necessary information is to send the stock
+% symbol in a query to Google Finance.
+good_symbol = {};
+
+if strcmp(feed, 'GOOG')
+    goog_symbol = {};
+    finance_url = 'https://www.google.com/finance?q=';
+    
+    for i = 1:length(symbol)
+        split = regexp(symbol{i}, '\.', 'split');
+        
+        if length(split) == 1
+            % US stock symbol.
+            try
+                html_string = urlread([finance_url symbol{i}], ...
+                    'Timeout', 10);
+            catch
+                error('get_data_quandl:no_connection', ...
+                    ['No connection. Failed to get HTML data for ' ...
+                    'symbol:\r\n''%s''\r\nCheck the network ' ...
+                    'connection.'], symbol{i});
+            end
+            
+            expression = ['(\w*:' symbol{i} ')'];
+            match = regexp(html_string, expression, 'once', 'match');
+            
+            if isempty(match)
+                warning('get_data_quandl:invalid_value', ...
+                    ['Invalid value. The stock symbol:' ...
+                    '\r\n''%s''\r\n does not exist.'], symbol{i});
+            else
+                match = regexprep(match, ':', '_');
+                goog_symbol = [goog_symbol, match];
+            end
+        else
+            % Foreign stock symbol.
+            row = strcmp(EXCHANGE_CODES(:, 1), split{2});
+            prefix = EXCHANGE_CODES(row, 2);
+
+            if ~isempty(prefix{1})
+                this_symbol = [prefix{1} '_' char(split{1})];
+                goog_symbol = [goog_symbol, this_symbol];
+            else
+                warning('get_data_quandl:invalid_value', ...
+                    ['Invalid value. The exchange:\r\n%s\r\nis not ' ...
+                    'supported by Google Finance.'], ...
+                    char(EXCHANGE_CODES(row, 3)));
+            end
+        end
+    end
+    
+    for i = 1:length(goog_symbol)
+        symbol_field = [goog_symbol{i} '.xml?exclude_data=true'];
+        
+        try
+            document = xmlread([price_url feed_field symbol_field ...
+                token_field], 'Timeout', 10);
+            
+            good_symbol = [good_symbol, goog_symbol{i}];
+        catch
+            result = user_input(split{1}, feed);
+            
+            if ~isempty(result)
+                good_symbol = [good_symbol, result];
+            end
+        end
+    end
+    
+    display_symbols(good_symbol, feed);
+end
+
+%%
+% In the case of the Quandl open data feed, foreign stock symbols are not
+% supported at all, whilst US stock symbols do not have an exchange code.
+if isempty(feed) || strcmp(feed, 'WIKI')
+    wiki_symbol = {};
+    
+    for i = 1:length(symbol)
+        split = regexp(symbol{i}, '\.', 'split');
+
+        if length(split) == 1
+            % US stock symbol.
+            wiki_symbol = [wiki_symbol, symbol{i}];
+        else
+            % Foreign stock symbol.
+            warning('get_data_quandl:invalid_value', ...
+                ['Invalid value. The stock symbol:\r\n''%s''\r\n' ...
+                'contains an unsupported exchange code.'], symbol{i});
+        end
+    end
+    
+    for i = 1:length(wiki_symbol)
+        symbol_field = [wiki_symbol{i} '.xml?exclude_data=true'];
+        
+        try
+            document = xmlread([price_url feed_field symbol_field ...
+                token_field], 'Timeout', 10);
+            
+            good_symbol = [good_symbol, wiki_symbol{i}];
+        catch
+            result = user_input(split{1}, feed);
+            
+            if ~isempty(result)
+                good_symbol = [good_symbol, result];
+            end
+        end
+    end
+    
+    display_symbols(good_symbol, feed);
+end
+
+%%
+% In the case of the Yahoo! Finance data feed, US stock symbols do not have
+% an exchange code, whilst foreign stock symbols usually have an exchange
+% prefix, and occasionally both an exchange prefix and exchange suffix.
+if strcmp(feed, 'YAHOO')
+    for i = 1:length(symbol)
+        split = regexp(symbol{i}, '\.', 'split');
+        
+        results = search_quandl(split{1}, 'count', 100, 'token', token);
+        
+        if length(split) == 1
+            % US stock symbol.
+            expression = split{1};
+        else
+            % Foreign stock symbol (prefix only).
+            expression = [split{2} '_' split{1}];
+        end
+        
+        for j = 1:length(results)
+            match = regexp(results(j).code, expression, 'once', 'match');
+            
+            if ~isempty(match)
+                good_symbol = [good_symbol, match];
+                break
+            end
+        end
+        
+        if isempty(match)
+            % Foreign stock symbol (prefix and suffix).
+            expression = ['^[A-Z]{3}_' split{1} '_' split{2}];
+
+            for j = 1:length(results)
+                match = regexp(results(j).code, expression, 'once', ...
+                    'match');
+
+                if ~isempty(match)
+                    good_symbol = [good_symbol, match];
+                    break
+                end
+            end
+        end
+        
+        if isempty(match)
+            result = user_input(split{1}, feed);
+
+            if ~isempty(result)
+                good_symbol = [good_symbol, result];
+            end
+        end
+    end
+    
+    display_symbols(good_symbol, feed);
+end
+
 %% Make REST requests.
 % At this point, all stock symbols comply with the naming convention of the
-% chosen data feed. There are however two further issues that must be dealt
-% with before historic stock data can be retrieved. The first issue is that
-% Quandl does not obtain its Yahoo! Finance or Google Finance data directly
-% from the source. As a result, Quandl's Yahoo! Finance and Google Finance
-% datasets are incomplete. What this means is that before historic stock
-% data can be retrieved from Quandl, it is necessary to confirm that the
-% chosen data feed actually contains data for each stock symbol. This is
-% done by submitting a request to Quandl for the dataset metadata. The
-% second issue is that the number of columns of data available from Quandl
-% for a particular stock symbol varies by data feed, along with the column
-% names. This is handled by comparing the name of each column of data with
-% a list of alternative, acceptable names.
+% chosen data feed. There is one further problem that must be solved before
+% historic stock data can be retrieved. The names and number of columns of
+% data available from Quandl for each stock symbol varies by data feed. The
+% way this is addressed is to compare the name of each column of data that
+% is available with a list of alternate, acceptable names for the content
+% of the columns.
 for i = 1:length(good_symbol)
     symbol_field = [good_symbol{i} '.xml?exclude_data=true'];
     
@@ -500,7 +555,7 @@ for i = 1:length(good_symbol)
     % information in the first column of data.
     data_array = datenum(price_data{1}, 'yyyy-mm-dd');
     is_column = false;
-     
+    
     for j = 2:8
         for k = 2:column_count
             if any(strcmp(COLUMN_NAMES{j}, ...
@@ -567,17 +622,32 @@ function check_token(token)
 validateattributes(token, {'char'}, {'row'});
 end
 
-function result = symbol_prompt(split)
-command = sprintf('start www.quandl.com/YAHOO?keyword=%s', split{1});
+function result = user_input(symbol, feed)
+command = sprintf('start www.quandl.com/%s?keyword=%s', ...
+    feed, symbol);
 system(command);
 
-symbol = [split{1} '.' split{2}];
-prompt = sprintf(['\nUnable to resolve symbol:\r\n''%s''\r\n'...
-    'Please find the correct symbol in the browser\n'...
-    'page that has just opened - look for the text\n'...
-    'beginning ''YAHOO/''. Enter the symbol below\n'...
-    'in single quotes and press enter. If the symbol\n'...
-    'does not exist, press enter.\r\n>> '], symbol);
-
+prompt = sprintf(['\nUnable to resolve symbol ''%s''.\r\n' ...
+    'Please locate the symbol in the browswer window that has just\n' ...
+    'opened. Enter the symbol at the command prompt below and press\n' ...
+    'enter. Look for the symbol following the ''%s/'' text within\n' ...
+    'each search result. If the symbol does not exist, press enter.' ...
+    '\r\n>> '], symbol, feed);
 result = input(prompt);
+end
+
+function display_symbols(symbol, feed)
+string = '';
+
+this_string = sprintf(['\nPlease verify that GET_DATA_QUANDL has ' ...
+    'correctly identified\nthe following ''%s'' data feed symbols ' ...
+    'before attempting to\nuse the returned data:\n'], feed);
+disp(this_string)
+
+for i = 1:length(symbol)
+    this_string = sprintf('%s\n', symbol{i});
+    string = [string this_string];
+end
+
+disp(string)
 end
